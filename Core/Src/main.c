@@ -108,7 +108,16 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    for (i = 0; i <= 65353; i++) {
+      TIM1->CCR1 = i;
+      for(j = 0; j < 100; j++) __NOP();
+    }
+    HAL_Delay(500);
+    for(i = 65535; i > 0; i--) {
+      TIM1->CCR1 = i;
+      for(j = 0; j < 100; j++) __NOP();
+    }
+    HAL_Delay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
