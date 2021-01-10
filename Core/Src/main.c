@@ -204,7 +204,7 @@ int main(void)
    // LED_Blinking(LED_BLINK_ERROR);
   //}
   
-  LL_TIM_OC_SetCompareCH1(TIM1,uhADCxConvertedData[1]);
+  //LL_TIM_OC_SetCompareCH1(TIM1,uhADCxConvertedData[1]);
   
   while (1)
   {

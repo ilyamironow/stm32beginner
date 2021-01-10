@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\EWARM\settings\Documents.Documents.general.xcl" --backend -f "C:\Users\dev\Documents\EWARM\settings\Documents.Documents.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\Documents.Documents.general.xcl" --backend -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\Documents.Documents.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\EWARM\settings\Documents.Documents.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\dev\Documents\EWARM\settings\Documents.Documents.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\Documents.Documents.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\Documents.Documents.driver.xcl" 
 
 @echo off 
 :end
