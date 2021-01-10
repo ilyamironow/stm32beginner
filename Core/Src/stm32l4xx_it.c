@@ -198,6 +198,68 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles DMA1 channel1 global interrupt.
+  */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+   if(LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
+  {
+    LL_DMA_ClearFlag_GI1(DMA1);
+    //LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
+   //LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
+    //TransferComplete();
+  }
+  else if(LL_DMA_IsActiveFlag_TE1(DMA1) == 1)
+  {
+    //TransferError();
+    
+  }
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 channel2 global interrupt.
+  */
+void DMA1_Channel2_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel2_IRQn 0 */
+  if(LL_DMA_IsActiveFlag_TC6(DMA1) == 1)
+  {
+    LL_DMA_ClearFlag_GI6(DMA1);
+    //LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+    //LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_2);
+    //LL_DMA_ClearFlag_GI1(DMA1);
+    //TransferComplete_Callback();
+  }
+  else if(LL_DMA_IsActiveFlag_TE6(DMA1) == 1)
+  {
+    //TransferError_Callback();
+  }
+  /* USER CODE END DMA1_Channel2_IRQn 0 */
+
+  /* USER CODE BEGIN DMA1_Channel2_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel2_IRQn 1 */
+}
+//i did below
+void TIM1_UP_TIM16_IRQHandler(void)
+{
+  /* Check whether update interrupt is pending */
+  if(LL_TIM_IsActiveFlag_UPDATE(TIM1) == 1)
+  {
+    /* Clear the update interrupt flag*/
+    LL_TIM_ClearFlag_UPDATE(TIM1);
+  }
+  
+  /* TIM1 update interrupt processing */
+  //TimerUpdate_Callback();
+}
+/**
   * @brief This function handles EXTI line[15:10] interrupts.
   */
 void EXTI15_10_IRQHandler(void)
