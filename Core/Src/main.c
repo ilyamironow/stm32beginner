@@ -116,8 +116,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
+  //dma was here
   MX_USART2_UART_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_ADC1_Init();
@@ -373,8 +374,7 @@ static void MX_TIM1_Init(void)
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  /* Peripheral clock enable */
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
+  
 
   /* TIM1 DMA Init */
 
@@ -400,10 +400,10 @@ static void MX_TIM1_Init(void)
   /* my code 
   i need LL_DMA_SetDataLength */
   LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, TEST_SIZE);
-  // i need LL_DMA_SetPeriphAddress
-  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&TIM1->CCR1);//neverno i think
   // i need LL_DMA_SetMemoryAddress
   LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&num);
+  // i need LL_DMA_SetPeriphAddress
+  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&TIM1->CCR1);
   
   /* DMA1_Channel2_IRQn interrupt configuration */
   LL_DMA_EnableIT_TC(DMA1,
@@ -419,6 +419,9 @@ static void MX_TIM1_Init(void)
   
   LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
   //end of my code
+  
+  /* Peripheral clock enable */
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
   
   /* USER CODE END TIM1_Init 1 */
   TIM_InitStruct.Prescaler = 0;
@@ -460,7 +463,7 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 /* Enable the DMA trigger */
   
-  LL_TIM_EnableDMAReq_UPDATE(TIM1);
+  LL_TIM_EnableDMAReq_CC1(TIM1);
   LL_TIM_EnableIT_UPDATE(TIM1);
   
   /* USER CODE END TIM1_Init 2 */
@@ -470,9 +473,9 @@ static void MX_TIM1_Init(void)
   */
   GPIO_InitStruct.Pin = LL_GPIO_PIN_8;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//it was LOW
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;//it was NO
   GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
@@ -576,9 +579,13 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-  NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-  /* DMA1_Channel2_IRQn interrupt configuration */
+  
+  
+  //NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  //NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  //enable later
+
+/* DMA1_Channel2_IRQn interrupt configuration */
   NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 
