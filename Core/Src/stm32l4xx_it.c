@@ -246,19 +246,7 @@ void DMA1_Channel2_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel2_IRQn 1 */
 }
-//i did below
-void TIM1_UP_TIM16_IRQHandler(void)
-{
-  /* Check whether update interrupt is pending */
-  if(LL_TIM_IsActiveFlag_UPDATE(TIM1) == 1)
-  {
-    /* Clear the update interrupt flag*/
-    LL_TIM_ClearFlag_UPDATE(TIM1);
-  }
-  
-  /* TIM1 update interrupt processing */
-  //TimerUpdate_Callback();
-}
+
 /**
   * @brief This function handles EXTI line[15:10] interrupts.
   */

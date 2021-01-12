@@ -25,15 +25,12 @@
 
 #define ADC_CONVERTED_DATA_BUFFER_SIZE   ((uint32_t)   16)
 
-//delete later !!!!!!!!!
-//#define TEST_SIZE   ((uint32_t)   1)
-
 
 #define VAR_CONVERTED_DATA_INIT_VALUE    (__LL_ADC_DIGITAL_SCALE(LL_ADC_RESOLUTION_12B) + 1)
 //static volatile uint16_t uhADCxConvertedData[ADC_CONVERTED_DATA_BUFFER_SIZE];
 __IO uint16_t uhADCxConvertedData[ADC_CONVERTED_DATA_BUFFER_SIZE];
-volatile unsigned long num = 5000;
-#define TEST_SIZE   ((unsigned long)   1)
+volatile unsigned short num = 5000;
+#define TEST_SIZE   ((unsigned short)   1)
 //static uint32_t aDST_Buffer[ADC_CONVERTED_DATA_BUFFER_SIZE];
 
 /* USER CODE END Includes */
@@ -118,19 +115,10 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  
-  
-  
-  //delete this when ch 2 works separately
-  for (int i = 0; i < 16; i++)
-    uhADCxConvertedData[i] = i*3000;
-  
-  
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_TIM1_Init();
-  
   MX_TIM2_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
@@ -209,12 +197,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-    //for (int i = 0; i < 16; i++) {
-    //  LL_TIM_OC_SetCompareCH1(TIM1, uhADCxConvertedData[i]);
-    //  for(j = 0; j < 10000; j++) __NOP();
-    //}
-    
-    
+
     /* USER CODE BEGIN 3 */
     /* Retrieve ADC conversion data */
     /* this is wrong, i am sorry
@@ -323,9 +306,9 @@ static void MX_ADC1_Init(void)
 
   LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
 
-  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
+  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);*/
 
-  *//* USER CODE BEGIN ADC1_Init 1 */
+  /* USER CODE BEGIN ADC1_Init 1 */
 
   /* USER CODE END ADC1_Init 1 */
   /** Common config
@@ -338,7 +321,7 @@ static void MX_ADC1_Init(void)
   ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_CONTINUOUS;
-  ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
+  ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_LIMITED;
   ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_OVERWRITTEN;
   LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
 
@@ -396,16 +379,53 @@ static void MX_TIM1_Init(void)
   /* TIM1 DMA Init */
 
   /* TIM1_CH1 Init */
-  
+  LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_2, LL_DMA_REQUEST_7);
+
+  LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_2, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
+
+  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PRIORITY_MEDIUM);
+
+  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MODE_CIRCULAR);
+
+  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PERIPH_NOINCREMENT);
+
+  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MEMORY_INCREMENT);
+
+  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PDATAALIGN_HALFWORD);
+
+  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MDATAALIGN_HALFWORD);
 
   /* USER CODE BEGIN TIM1_Init 1 */
-
+  
+  /* my code 
+  i need LL_DMA_SetDataLength */
+  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, TEST_SIZE);
+  // i need LL_DMA_SetPeriphAddress
+  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&TIM1->CCR1);//neverno i think
+  // i need LL_DMA_SetMemoryAddress
+  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&num);
+  
+  /* DMA1_Channel2_IRQn interrupt configuration */
+  LL_DMA_EnableIT_TC(DMA1,
+                     LL_DMA_CHANNEL_2);
+  
+  /* Enable DMA transfer interruption: half transfer */
+  LL_DMA_EnableIT_HT(DMA1,
+                     LL_DMA_CHANNEL_2);
+  
+  /* Enable DMA transfer interruption: transfer error */
+  LL_DMA_EnableIT_TE(DMA1,
+                     LL_DMA_CHANNEL_2);
+  
+  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
+  //end of my code
+  
   /* USER CODE END TIM1_Init 1 */
   TIM_InitStruct.Prescaler = 0;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
   TIM_InitStruct.Autoreload = 60000;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
-  TIM_InitStruct.RepetitionCounter = 3; //it was 0
+  TIM_InitStruct.RepetitionCounter = 0;
   LL_TIM_Init(TIM1, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM1);
   LL_TIM_OC_EnablePreload(TIM1, LL_TIM_CHANNEL_CH1);
@@ -444,17 +464,17 @@ static void MX_TIM1_Init(void)
   LL_TIM_EnableIT_UPDATE(TIM1);
   
   /* USER CODE END TIM1_Init 2 */
-  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOB);
+  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
   /**TIM1 GPIO Configuration
-  PB13   ------> TIM1_CH1N
+  PA8   ------> TIM1_CH1
   */
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_8;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
-  LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 }
 
@@ -556,93 +576,11 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  
-  
-  
-  //NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-  //NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-  
-
-
-/* DMA1_Channel2_IRQn interrupt configuration */
+  NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* DMA1_Channel2_IRQn interrupt configuration */
   NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(DMA1_Channel2_IRQn);
-  
-  // here goes my code
-  
-  LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_1, LL_DMA_REQUEST_0);
-
-  LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
-
-  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PRIORITY_HIGH);
-
-  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MODE_CIRCULAR);
-
-  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PERIPH_NOINCREMENT);
-
-  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MEMORY_INCREMENT);
-
-  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
-
-  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
-  /* my code again
-  i need LL_DMA_SetDataLength */
-  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, ADC_CONVERTED_DATA_BUFFER_SIZE);
-  // i need LL_DMA_SetPeriphAddress
-  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_1, LL_ADC_DMA_GetRegAddr(ADC1, LL_ADC_DMA_REG_REGULAR_DATA));
-  // i need LL_DMA_SetMemoryAddress
-  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&uhADCxConvertedData);
-  /* DMA1_Channel1_IRQn interrupt configuration */
-  LL_DMA_EnableIT_TC(DMA1,
-                     LL_DMA_CHANNEL_1);
-  
-  /* Enable DMA transfer interruption: half transfer */
-  LL_DMA_EnableIT_HT(DMA1,
-                     LL_DMA_CHANNEL_1);
-  
-  /* Enable DMA transfer interruption: transfer error */
-  LL_DMA_EnableIT_TE(DMA1,
-                     LL_DMA_CHANNEL_1);
-  
-  //LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
-  
-  // my code for PWM DMA
-  LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_2, LL_DMA_REQUEST_7);
-
-  LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_2, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
-
-  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PRIORITY_VERYHIGH);//LL_DMA_PRIORITY_MEDIUM
-
-  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MODE_CIRCULAR);
-
-  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PERIPH_NOINCREMENT);
-
-  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MEMORY_INCREMENT);
-
-  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PDATAALIGN_WORD);
-
-  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MDATAALIGN_WORD);
-  /* my code again again
-  i need LL_DMA_SetDataLength */
-  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, TEST_SIZE);
-  // i need LL_DMA_SetPeriphAddress
-  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)0x40012C34);//neverno i think
-  // i need LL_DMA_SetMemoryAddress
-  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&num);
-  
-  /* DMA1_Channel2_IRQn interrupt configuration */
-  LL_DMA_EnableIT_TC(DMA1,
-                     LL_DMA_CHANNEL_2);
-  
-  /* Enable DMA transfer interruption: half transfer */
-  LL_DMA_EnableIT_HT(DMA1,
-                     LL_DMA_CHANNEL_2);
-  
-  /* Enable DMA transfer interruption: transfer error */
-  LL_DMA_EnableIT_TE(DMA1,
-                     LL_DMA_CHANNEL_2);
-  
-  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
 
 }
 
@@ -691,8 +629,8 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_8|LL_GPIO_PIN_9|LL_GPIO_PIN_10
-                          |LL_GPIO_PIN_11|LL_GPIO_PIN_12|LL_GPIO_PIN_15;
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_9|LL_GPIO_PIN_10|LL_GPIO_PIN_11
+                          |LL_GPIO_PIN_12|LL_GPIO_PIN_15;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -713,9 +651,9 @@ static void MX_GPIO_Init(void)
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_0|LL_GPIO_PIN_1|LL_GPIO_PIN_2|LL_GPIO_PIN_10
-                          |LL_GPIO_PIN_11|LL_GPIO_PIN_12|LL_GPIO_PIN_14|LL_GPIO_PIN_15
-                          |LL_GPIO_PIN_4|LL_GPIO_PIN_5|LL_GPIO_PIN_6|LL_GPIO_PIN_7
-                          |LL_GPIO_PIN_8|LL_GPIO_PIN_9;
+                          |LL_GPIO_PIN_11|LL_GPIO_PIN_12|LL_GPIO_PIN_13|LL_GPIO_PIN_14
+                          |LL_GPIO_PIN_15|LL_GPIO_PIN_4|LL_GPIO_PIN_5|LL_GPIO_PIN_6
+                          |LL_GPIO_PIN_7|LL_GPIO_PIN_8|LL_GPIO_PIN_9;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
