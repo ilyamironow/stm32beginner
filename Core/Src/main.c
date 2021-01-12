@@ -23,15 +23,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#define ADC_CONVERTED_DATA_BUFFER_SIZE   ((uint32_t)   16)
-
-
+#define ADC_CONVERTED_DATA_BUFFER_SIZE   ((uint16_t)   16)
 #define VAR_CONVERTED_DATA_INIT_VALUE    (__LL_ADC_DIGITAL_SCALE(LL_ADC_RESOLUTION_12B) + 1)
-//static volatile uint16_t uhADCxConvertedData[ADC_CONVERTED_DATA_BUFFER_SIZE];
 __IO uint16_t uhADCxConvertedData[ADC_CONVERTED_DATA_BUFFER_SIZE];
-volatile unsigned short num = 5000;
-#define TEST_SIZE   ((unsigned short)   1)
-//static uint32_t aDST_Buffer[ADC_CONVERTED_DATA_BUFFER_SIZE];
 
 /* USER CODE END Includes */
 
@@ -116,23 +110,19 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //dma was here
   MX_USART2_UART_Init();
   MX_DMA_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);//delete it
-  //LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1N);//should be CH1N
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
   LL_TIM_EnableAllOutputs(TIM1);
   LL_TIM_EnableCounter(TIM1);
   /* Force update generation */
   LL_TIM_GenerateEvent_UPDATE(TIM1);
   volatile uint16_t j = 0;
-//  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
-//  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
-  //last time dma was here
+
   /* Enable ADC */
   /* Disable ADC deep power down (enabled by default after reset state) */
   LL_ADC_DisableDeepPowerDown(ADC1);
@@ -180,36 +170,16 @@ int main(void)
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-    
-  /*(3) Configure NVIC for DMA transfer complete/error interrupts */
-  //LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_1);
-  //LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_1);
-  
-  
-  //if (LL_DMA_DeInit(DMA1, LL_DMA_CHANNEL_1) != SUCCESS) 
-  //{
-    /* Initialization Error */
-   // LED_Blinking(LED_BLINK_ERROR);
-  //}
-  
-  //LL_TIM_OC_SetCompareCH1(TIM1,uhADCxConvertedData[1]);
   
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-    /* Retrieve ADC conversion data */
-    /* this is wrong, i am sorry
-    for (uint32_t tmp_index_adc_converted_data = 0; tmp_index_adc_converted_data < ADC_CONVERTED_DATA_BUFFER_SIZE; tmp_index_adc_converted_data++)
-    {
-      uhADCxConvertedData[tmp_index_adc_converted_data] = 10 * LL_ADC_REG_ReadConversionData12(ADC1);
-    }*/
-    //uhADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
+     /* USER CODE BEGIN WHILE */
     
-    //for(j = 0; j < 20; j++) __NOP();
+    /* USER CODE END WHILE */
   }
+  
+  /* USER CODE BEGIN 3 */
+  
   /* USER CODE END 3 */
 }
 
@@ -293,7 +263,7 @@ static void MX_ADC1_Init(void)
   /* ADC1 DMA Init */
 
   /* ADC1 Init */
-  /*LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_1, LL_DMA_REQUEST_0);
+  LL_DMA_SetPeriphRequest(DMA1, LL_DMA_CHANNEL_1, LL_DMA_REQUEST_0);
 
   LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
@@ -307,10 +277,30 @@ static void MX_ADC1_Init(void)
 
   LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
 
-  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);*/
+  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
 
   /* USER CODE BEGIN ADC1_Init 1 */
-
+  /* my code
+  i need LL_DMA_SetDataLength */
+  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, ADC_CONVERTED_DATA_BUFFER_SIZE);
+  // i need LL_DMA_SetPeriphAddress
+  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_1, LL_ADC_DMA_GetRegAddr(ADC1, LL_ADC_DMA_REG_REGULAR_DATA));
+  // i need LL_DMA_SetMemoryAddress
+  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&uhADCxConvertedData);
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  LL_DMA_EnableIT_TC(DMA1,
+                     LL_DMA_CHANNEL_1);
+  
+  /* Enable DMA transfer interruption: half transfer */
+  LL_DMA_EnableIT_HT(DMA1,
+                     LL_DMA_CHANNEL_1);
+  
+  /* Enable DMA transfer interruption: transfer error */
+  LL_DMA_EnableIT_TE(DMA1,
+                     LL_DMA_CHANNEL_1);
+  
+  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
   /* USER CODE END ADC1_Init 1 */
   /** Common config
   */
@@ -322,7 +312,7 @@ static void MX_ADC1_Init(void)
   ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_CONTINUOUS;
-  ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_LIMITED;
+  ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
   ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_OVERWRITTEN;
   LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
 
@@ -374,8 +364,6 @@ static void MX_TIM1_Init(void)
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  
-
   /* TIM1 DMA Init */
 
   /* TIM1_CH1 Init */
@@ -385,7 +373,7 @@ static void MX_TIM1_Init(void)
 
   LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PRIORITY_MEDIUM);
 
-  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MODE_CIRCULAR);
+  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_MODE_CIRCULAR);//was circular
 
   LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_2, LL_DMA_PERIPH_NOINCREMENT);
 
@@ -399,9 +387,9 @@ static void MX_TIM1_Init(void)
   
   /* my code 
   i need LL_DMA_SetDataLength */
-  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, TEST_SIZE);
+  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, ADC_CONVERTED_DATA_BUFFER_SIZE);
   // i need LL_DMA_SetMemoryAddress
-  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&num);
+  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&uhADCxConvertedData);
   // i need LL_DMA_SetPeriphAddress
   LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_2, (uint32_t)&TIM1->CCR1);
   
@@ -581,9 +569,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel1_IRQn interrupt configuration */
   
   
-  //NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-  //NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-  //enable later
+  NVIC_SetPriority(DMA1_Channel1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
 
 /* DMA1_Channel2_IRQn interrupt configuration */
   NVIC_SetPriority(DMA1_Channel2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
