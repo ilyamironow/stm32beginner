@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.40.1.212/W32 for ARM                  01/Feb/2021  23:41:29
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  02/Feb/2021  16:52:49
 # Copyright 2007-2019 IAR Systems AB.
 #
 #    Output file  =
@@ -8,7 +8,7 @@
 #    Map file     =
 #        C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\List\workfinale.map
 #    Command line =
-#        -f C:\Users\75BD~1\AppData\Local\Temp\EW70AE.tmp
+#        -f C:\Users\75BD~1\AppData\Local\Temp\EWA4A1.tmp
 #        (C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\Obj\adc.o
 #        C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\Obj\gpio.o
 #        C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\Obj\main.o
@@ -72,73 +72,33 @@ initialize by copy { rw };
   .intvec            ro code   0x800'0000  0x18c  startup_stm32l412xx.o [1]
                              - 0x800'018c  0x18c
 
-"P1":                                      0xca4
+"P1":                                      0xd46
   .text              ro code   0x800'018c  0x1e4  stm32l4xx_ll_rcc.o [1]
-  .text              ro code   0x800'0370  0x1a8  main.o [1]
-  .text              ro code   0x800'0518   0xe8  gpio.o [1]
-  .text              ro code   0x800'0600   0xf0  adc.o [1]
-  .text              ro code   0x800'06f0   0xa4  usart.o [1]
-  .text              ro code   0x800'0794   0x28  stm32l4xx_ll_utils.o [1]
-  .text              ro code   0x800'07bc   0x14  memset.o [3]
-  .text              ro code   0x800'07d0  0x13c  stm32l4xx_ll_exti.o [1]
-  .text              ro code   0x800'090c   0xfa  stm32l4xx_ll_gpio.o [1]
-  .text              ro code   0x800'0a06   0x2e  copy_init3.o [3]
-  .text              ro code   0x800'0a34   0xc4  stm32l4xx_ll_adc.o [1]
-  .text              ro code   0x800'0af8   0xb0  stm32l4xx_ll_usart.o [1]
-  .text              ro code   0x800'0ba8   0x66  ABImemset.o [3]
-  .text              ro code   0x800'0c0e   0x12  stm32l4xx_it.o [1]
-  .text              ro code   0x800'0c20   0x50  system_stm32l4xx.o [1]
-  .rodata            const     0x800'0c70   0x30  system_stm32l4xx.o [1]
-  .text              ro code   0x800'0ca0   0x28  data_init.o [3]
-  .iar.init_table    const     0x800'0cc8   0x14  - Linker created -
-  .text              ro code   0x800'0cdc   0x1e  cmain.o [3]
-  .text              ro code   0x800'0cfa    0x4  low_level_init.o [2]
-  .text              ro code   0x800'0cfe    0x4  exit.o [2]
-  .text              ro code   0x800'0d04    0xa  cexit.o [3]
-  .text              ro code   0x800'0d10   0x14  exit.o [4]
-  .text              ro code   0x800'0d24   0x10  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d34    0xc  cstartup_M.o [3]
-  .rodata            const     0x800'0d40    0x8  system_stm32l4xx.o [1]
-  Initializer bytes  const     0x800'0d48    0x8  <for P2-1>
-  .text              ro code   0x800'0d50    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d54    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d58    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d5c    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d60    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d64    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d68    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d6c    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d70    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d74    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d78    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d7c    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d80    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d84    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d88    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d8c    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d90    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d94    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d98    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0d9c    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0da0    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0da4    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0da8    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dac    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0db0    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0db4    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0db8    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dbc    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dc0    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dc4    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dc8    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dcc    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dd0    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dd4    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0dd8    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0ddc    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0de0    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0de4    0x4  startup_stm32l412xx.o [1]
-  .text              ro code   0x800'0de8    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0370  0x1c4  main.o [1]
+  .text              ro code   0x800'0534   0xe8  gpio.o [1]
+  .text              ro code   0x800'061c  0x170  adc.o [1]
+  .text              ro code   0x800'078c   0xa4  usart.o [1]
+  .text              ro code   0x800'0830   0x28  stm32l4xx_ll_utils.o [1]
+  .text              ro code   0x800'0858   0x14  memset.o [3]
+  .text              ro code   0x800'086c  0x13c  stm32l4xx_ll_exti.o [1]
+  .text              ro code   0x800'09a8   0xfa  stm32l4xx_ll_gpio.o [1]
+  .text              ro code   0x800'0aa2   0x12  stm32l4xx_it.o [1]
+  .text              ro code   0x800'0ab4   0xc4  stm32l4xx_ll_adc.o [1]
+  .text              ro code   0x800'0b78   0xb0  stm32l4xx_ll_usart.o [1]
+  .text              ro code   0x800'0c28   0x66  ABImemset.o [3]
+  .text              ro code   0x800'0c90   0x50  system_stm32l4xx.o [1]
+  .text              ro code   0x800'0ce0   0x38  packbits_init_single.o [3]
+  .rodata            const     0x800'0d18   0x30  system_stm32l4xx.o [1]
+  .text              ro code   0x800'0d48   0x28  data_init.o [3]
+  .iar.init_table    const     0x800'0d70   0x10  - Linker created -
+  .text              ro code   0x800'0d80   0x1e  cmain.o [3]
+  .text              ro code   0x800'0d9e    0x4  low_level_init.o [2]
+  .text              ro code   0x800'0da2    0x4  exit.o [2]
+  .text              ro code   0x800'0da8    0xa  cexit.o [3]
+  .text              ro code   0x800'0db4   0x14  exit.o [4]
+  .text              ro code   0x800'0dc8   0x10  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0dd8    0xc  cstartup_M.o [3]
+  .rodata            const     0x800'0de4    0x8  system_stm32l4xx.o [1]
   .text              ro code   0x800'0dec    0x4  startup_stm32l412xx.o [1]
   .text              ro code   0x800'0df0    0x4  startup_stm32l412xx.o [1]
   .text              ro code   0x800'0df4    0x4  startup_stm32l412xx.o [1]
@@ -156,26 +116,66 @@ initialize by copy { rw };
   .text              ro code   0x800'0e24    0x4  startup_stm32l412xx.o [1]
   .text              ro code   0x800'0e28    0x4  startup_stm32l412xx.o [1]
   .text              ro code   0x800'0e2c    0x4  startup_stm32l412xx.o [1]
-  .rodata            const     0x800'0e30    0x0  copy_init3.o [3]
-                             - 0x800'0e30  0xca4
+  .text              ro code   0x800'0e30    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e34    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e38    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e3c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e40    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e44    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e48    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e4c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e50    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e54    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e58    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e5c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e60    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e64    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e68    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e6c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e70    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e74    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e78    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e7c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e80    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e84    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e88    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e8c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e90    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e94    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e98    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0e9c    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ea0    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ea4    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ea8    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0eac    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0eb0    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0eb4    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0eb8    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ebc    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ec0    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ec4    0x4  startup_stm32l412xx.o [1]
+  .text              ro code   0x800'0ec8    0x4  startup_stm32l412xx.o [1]
+  .rodata            const     0x800'0ecc    0x0  packbits_init_single.o [3]
+  Initializer bytes  const     0x800'0ecc    0x6  <for P2-1>
+                             - 0x800'0ed2  0xd46
 
-"P2", part 1 of 2:                           0x8
-  P2-1                        0x2000'0000    0x8  <Init block>
+"P2", part 1 of 2:                          0x10
+  P2-1                        0x2000'0000   0x10  <Init block>
     .data            inited   0x2000'0000    0x4  system_stm32l4xx.o [1]
-    .bss             inited   0x2000'0004    0x4  main.o [1]
-                            - 0x2000'0008    0x8
+    .bss             inited   0x2000'0004    0xc  main.o [1]
+                            - 0x2000'0010   0x10
 
 "P2", part 2 of 2:                         0x400
-  CSTACK                      0x2000'0008  0x400  <Block>
-    CSTACK           uninit   0x2000'0008  0x400  <Block tail>
-                            - 0x2000'0408  0x400
+  CSTACK                      0x2000'0010  0x400  <Block>
+    CSTACK           uninit   0x2000'0010  0x400  <Block tail>
+                            - 0x2000'0410  0x400
 
 Unused ranges:
 
          From           To      Size
          ----           --      ----
-   0x800'0e30   0x801'ffff  0x1'f1d0
-  0x2000'0408  0x2000'9fff    0x9bf8
+   0x800'0ed2   0x801'ffff  0x1'f12e
+  0x2000'0410  0x2000'9fff    0x9bf0
 
 
 *******************************************************************************
@@ -184,11 +184,11 @@ Unused ranges:
 
           Address      Size
           -------      ----
-Copy (__iar_copy_init3)
-    1 source range, total size 0x8:
-           0x800'0d48   0x8
-    1 destination range, total size 0x8:
-          0x2000'0000   0x8
+Copy/packbits (__iar_packbits_init_single3)
+    1 source range, total size 0x6 (37% of destination):
+           0x800'0ecc   0x6
+    1 destination range, total size 0x10:
+          0x2000'0000  0x10
 
 
 
@@ -196,55 +196,55 @@ Copy (__iar_copy_init3)
 *** MODULE SUMMARY
 ***
 
-    Module                 ro code  ro data  rw data
-    ------                 -------  -------  -------
+    Module                  ro code  ro data  rw data
+    ------                  -------  -------  -------
 command line/config:
-    ------------------------------------------------
+    -------------------------------------------------
     Total:
 
 C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\Obj: [1]
-    adc.o                      240
-    gpio.o                     232
-    main.o                     424        4        4
-    startup_stm32l412xx.o      636
-    stm32l4xx_it.o              18
-    stm32l4xx_ll_adc.o         196
-    stm32l4xx_ll_exti.o        316
-    stm32l4xx_ll_gpio.o        250
-    stm32l4xx_ll_rcc.o         484
-    stm32l4xx_ll_usart.o       176
-    stm32l4xx_ll_utils.o        40
-    system_stm32l4xx.o          80       60        4
-    usart.o                    164
-    ------------------------------------------------
-    Total:                   3'256       64        8
+    adc.o                       368
+    gpio.o                      232
+    main.o                      452        5       12
+    startup_stm32l412xx.o       636
+    stm32l4xx_it.o               18
+    stm32l4xx_ll_adc.o          196
+    stm32l4xx_ll_exti.o         316
+    stm32l4xx_ll_gpio.o         250
+    stm32l4xx_ll_rcc.o          484
+    stm32l4xx_ll_usart.o        176
+    stm32l4xx_ll_utils.o         40
+    system_stm32l4xx.o           80       57        4
+    usart.o                     164
+    -------------------------------------------------
+    Total:                    3'412       62       16
 
 dl7M_tln.a: [2]
-    exit.o                       4
-    low_level_init.o             4
-    ------------------------------------------------
-    Total:                       8
+    exit.o                        4
+    low_level_init.o              4
+    -------------------------------------------------
+    Total:                        8
 
 rt7M_tl.a: [3]
-    ABImemset.o                102
-    cexit.o                     10
-    cmain.o                     30
-    copy_init3.o                46
-    cstartup_M.o                12
-    data_init.o                 40
-    memset.o                    20
-    ------------------------------------------------
-    Total:                     260
+    ABImemset.o                 102
+    cexit.o                      10
+    cmain.o                      30
+    cstartup_M.o                 12
+    data_init.o                  40
+    memset.o                     20
+    packbits_init_single.o       56
+    -------------------------------------------------
+    Total:                      270
 
 shb_l.a: [4]
-    exit.o                      20
-    ------------------------------------------------
-    Total:                      20
+    exit.o                       20
+    -------------------------------------------------
+    Total:                       20
 
-    Gaps                         4
-    Linker created                       20    1'024
-----------------------------------------------------
-    Grand Total:             3'548       84    1'032
+    Gaps                          6
+    Linker created                        16    1'024
+-----------------------------------------------------
+    Grand Total:              3'716       78    1'040
 
 
 *******************************************************************************
@@ -253,68 +253,78 @@ shb_l.a: [4]
 
 Entry                       Address   Size  Type      Object
 -----                       -------   ----  ----      ------
-.iar.init_table$$Base    0x800'0cc8          --   Gb  - Linker created -
-.iar.init_table$$Limit   0x800'0cdc          --   Gb  - Linker created -
-?main                    0x800'0cdd         Code  Gb  cmain.o [3]
-AHBPrescTable            0x800'0c60   0x10  Data  Gb  system_stm32l4xx.o [1]
-APBPrescTable            0x800'0d40    0x8  Data  Gb  system_stm32l4xx.o [1]
-BusFault_Handler         0x800'0c15    0x2  Code  Gb  stm32l4xx_it.o [1]
-CSTACK$$Base            0x2000'0008          --   Gb  - Linker created -
-CSTACK$$Limit           0x2000'0408          --   Gb  - Linker created -
-DebugMon_Handler         0x800'0c1b    0x2  Code  Gb  stm32l4xx_it.o [1]
-HardFault_Handler        0x800'0c11    0x2  Code  Gb  stm32l4xx_it.o [1]
-LL_ADC_CommonInit        0x800'0a35   0x3e  Code  Gb  stm32l4xx_ll_adc.o [1]
-LL_ADC_Init              0x800'0a73   0x26  Code  Gb  stm32l4xx_ll_adc.o [1]
-LL_ADC_REG_Init          0x800'0a99   0x4c  Code  Gb  stm32l4xx_ll_adc.o [1]
+.iar.init_table$$Base    0x800'0d70          --   Gb  - Linker created -
+.iar.init_table$$Limit   0x800'0d80          --   Gb  - Linker created -
+?main                    0x800'0d81         Code  Gb  cmain.o [3]
+AHBPrescTable            0x800'0cd0   0x10  Data  Gb  system_stm32l4xx.o [1]
+APBPrescTable            0x800'0de4    0x8  Data  Gb  system_stm32l4xx.o [1]
+BusFault_Handler         0x800'0aa9    0x2  Code  Gb  stm32l4xx_it.o [1]
+CSTACK$$Base            0x2000'0010          --   Gb  - Linker created -
+CSTACK$$Limit           0x2000'0410          --   Gb  - Linker created -
+DebugMon_Handler         0x800'0aaf    0x2  Code  Gb  stm32l4xx_it.o [1]
+HardFault_Handler        0x800'0aa5    0x2  Code  Gb  stm32l4xx_it.o [1]
+LL_ADC_CommonInit        0x800'0ab5   0x3e  Code  Gb  stm32l4xx_ll_adc.o [1]
+LL_ADC_Init              0x800'0af3   0x26  Code  Gb  stm32l4xx_ll_adc.o [1]
+LL_ADC_REG_Init          0x800'0b19   0x4c  Code  Gb  stm32l4xx_ll_adc.o [1]
+LL_ADC_REG_SetSequencerRanks
+                         0x800'061d   0x26  Code  Lc  adc.o [1]
+LL_ADC_SetChannelSamplingTime
+                         0x800'0643   0x24  Code  Lc  adc.o [1]
+LL_ADC_SetChannelSingleDiff
+                         0x800'0667   0x1e  Code  Lc  adc.o [1]
 LL_AHB2_GRP1_EnableClock
-                         0x800'0519   0x16  Code  Lc  gpio.o [1]
-LL_EXTI_Init             0x800'07d1  0x134  Code  Gb  stm32l4xx_ll_exti.o [1]
-LL_GPIO_Init             0x800'090d   0xb6  Code  Gb  stm32l4xx_ll_gpio.o [1]
-LL_Init1msTick           0x800'0795   0x18  Code  Gb  stm32l4xx_ll_utils.o [1]
+                         0x800'0535   0x16  Code  Lc  gpio.o [1]
+LL_EXTI_Init             0x800'086d  0x134  Code  Gb  stm32l4xx_ll_exti.o [1]
+LL_GPIO_Init             0x800'09a9   0xb6  Code  Gb  stm32l4xx_ll_gpio.o [1]
+LL_Init1msTick           0x800'0831   0x18  Code  Gb  stm32l4xx_ll_utils.o [1]
 LL_RCC_GetUSARTClockFreq
                          0x800'018d   0xb6  Code  Gb  stm32l4xx_ll_rcc.o [1]
-LL_SetSystemCoreClock    0x800'07ad    0x6  Code  Gb  stm32l4xx_ll_utils.o [1]
-LL_USART_Init            0x800'0af9   0x9c  Code  Gb  stm32l4xx_ll_usart.o [1]
-MSIRangeTable            0x800'0c70   0x30  Data  Gb  system_stm32l4xx.o [1]
-MX_ADC1_Init             0x800'0601   0xf0  Code  Gb  adc.o [1]
-MX_GPIO_Init             0x800'052f   0xb6  Code  Gb  gpio.o [1]
-MX_USART2_UART_Init      0x800'06f1   0xa4  Code  Gb  usart.o [1]
-MemManage_Handler        0x800'0c13    0x2  Code  Gb  stm32l4xx_it.o [1]
-NMI_Handler              0x800'0c0f    0x2  Code  Gb  stm32l4xx_it.o [1]
-PendSV_Handler           0x800'0c1d    0x2  Code  Gb  stm32l4xx_it.o [1]
+LL_SetSystemCoreClock    0x800'0849    0x6  Code  Gb  stm32l4xx_ll_utils.o [1]
+LL_USART_Init            0x800'0b79   0x9c  Code  Gb  stm32l4xx_ll_usart.o [1]
+MSIRangeTable            0x800'0d18   0x30  Data  Gb  system_stm32l4xx.o [1]
+MX_ADC1_Init             0x800'0685   0xe0  Code  Gb  adc.o [1]
+MX_GPIO_Init             0x800'054b   0xb6  Code  Gb  gpio.o [1]
+MX_USART2_UART_Init      0x800'078d   0xa4  Code  Gb  usart.o [1]
+MemManage_Handler        0x800'0aa7    0x2  Code  Gb  stm32l4xx_it.o [1]
+NMI_Handler              0x800'0aa3    0x2  Code  Gb  stm32l4xx_it.o [1]
+PendSV_Handler           0x800'0ab1    0x2  Code  Gb  stm32l4xx_it.o [1]
 RCC_GetHCLKClockFreq     0x800'029d    0xc  Code  Gb  stm32l4xx_ll_rcc.o [1]
 RCC_GetPCLK1ClockFreq    0x800'02a9    0xa  Code  Gb  stm32l4xx_ll_rcc.o [1]
 RCC_GetPCLK2ClockFreq    0x800'02b9    0xc  Code  Gb  stm32l4xx_ll_rcc.o [1]
 RCC_GetSystemClockFreq   0x800'0243   0x5a  Code  Gb  stm32l4xx_ll_rcc.o [1]
 RCC_PLL_GetFreqDomain_SYS
                          0x800'02c5   0x54  Code  Gb  stm32l4xx_ll_rcc.o [1]
-Region$$Table$$Base      0x800'0cc8          --   Gb  - Linker created -
-Region$$Table$$Limit     0x800'0cdc          --   Gb  - Linker created -
-SVC_Handler              0x800'0c19    0x2  Code  Gb  stm32l4xx_it.o [1]
-SysTick_Handler          0x800'0c1f    0x2  Code  Gb  stm32l4xx_it.o [1]
-SystemClock_Config       0x800'0423   0xbe  Code  Gb  main.o [1]
+Region$$Table$$Base      0x800'0d70          --   Gb  - Linker created -
+Region$$Table$$Limit     0x800'0d80          --   Gb  - Linker created -
+SVC_Handler              0x800'0aad    0x2  Code  Gb  stm32l4xx_it.o [1]
+SysTick_Handler          0x800'0ab3    0x2  Code  Gb  stm32l4xx_it.o [1]
+SystemClock_Config       0x800'043d   0xbe  Code  Gb  main.o [1]
 SystemCoreClock         0x2000'0000    0x4  Data  Gb  system_stm32l4xx.o [1]
-SystemInit               0x800'0c21   0x32  Code  Gb  system_stm32l4xx.o [1]
-UsageFault_Handler       0x800'0c17    0x2  Code  Gb  stm32l4xx_it.o [1]
-__aeabi_memset           0x800'0ba9         Code  Gb  ABImemset.o [3]
-__cmain                  0x800'0cdd         Code  Gb  cmain.o [3]
-__exit                   0x800'0d11   0x14  Code  Gb  exit.o [4]
-__iar_Memset             0x800'0ba9         Code  Gb  ABImemset.o [3]
-__iar_Memset_word        0x800'0bb1         Code  Gb  ABImemset.o [3]
-__iar_copy_init3         0x800'0a07   0x2e  Code  Gb  copy_init3.o [3]
-__iar_data_init3         0x800'0ca1   0x28  Code  Gb  data_init.o [3]
-__iar_program_start      0x800'0d35         Code  Gb  cstartup_M.o [3]
-__low_level_init         0x800'0cfb    0x4  Code  Gb  low_level_init.o [2]
+SystemInit               0x800'0c91   0x32  Code  Gb  system_stm32l4xx.o [1]
+UsageFault_Handler       0x800'0aab    0x2  Code  Gb  stm32l4xx_it.o [1]
+__aeabi_memset           0x800'0c29         Code  Gb  ABImemset.o [3]
+__cmain                  0x800'0d81         Code  Gb  cmain.o [3]
+__exit                   0x800'0db5   0x14  Code  Gb  exit.o [4]
+__iar_Memset             0x800'0c29         Code  Gb  ABImemset.o [3]
+__iar_Memset_word        0x800'0c31         Code  Gb  ABImemset.o [3]
+__iar_data_init3         0x800'0d49   0x28  Code  Gb  data_init.o [3]
+__iar_packbits_init_single3
+                         0x800'0ce1   0x38  Code  Gb  packbits_init_single.o [3]
+__iar_program_start      0x800'0dd9         Code  Gb  cstartup_M.o [3]
+__low_level_init         0x800'0d9f    0x4  Code  Gb  low_level_init.o [2]
 __vector_table           0x800'0000         Data  Gb  startup_stm32l412xx.o [1]
-_call_main               0x800'0ce9         Code  Gb  cmain.o [3]
-_exit                    0x800'0d05         Code  Gb  cexit.o [3]
-_main                    0x800'0cf7         Code  Gb  cmain.o [3]
+_call_main               0x800'0d8d         Code  Gb  cmain.o [3]
+_exit                    0x800'0da9         Code  Gb  cexit.o [3]
+_main                    0x800'0d9b         Code  Gb  cmain.o [3]
 aADCxConvertedData      0x2000'0006    0x2  Data  Gb  main.o [1]
-exit                     0x800'0cff    0x4  Code  Gb  exit.o [2]
+exit                     0x800'0da3    0x4  Code  Gb  exit.o [2]
 hADCxConvertedData_Temperature_DegreeCelsius
-                        0x2000'0004    0x2  Data  Gb  main.o [1]
-main                     0x800'0371   0xb2  Code  Gb  main.o [1]
-memset                   0x800'07bd   0x14  Code  Gb  memset.o [3]
+                        0x2000'000c    0x4  Data  Gb  main.o [1]
+main                     0x800'0371   0xcc  Code  Gb  main.o [1]
+memset                   0x800'0859   0x14  Code  Gb  memset.o [3]
+temp_or_volt            0x2000'0004    0x1  Data  Gb  main.o [1]
+uhADCxConvertedData_Vbat_mVolt
+                        0x2000'0008    0x4  Data  Gb  main.o [1]
 
 
 [1] = C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\workfinale\Obj
@@ -322,9 +332,9 @@ memset                   0x800'07bd   0x14  Code  Gb  memset.o [3]
 [3] = rt7M_tl.a
 [4] = shb_l.a
 
-  3'548 bytes of readonly  code memory
-     84 bytes of readonly  data memory
-  1'032 bytes of readwrite data memory
+  3'716 bytes of readonly  code memory
+     78 bytes of readonly  data memory
+  1'040 bytes of readwrite data memory
 
 Errors: none
 Warnings: none

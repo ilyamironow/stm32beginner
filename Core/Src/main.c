@@ -57,7 +57,11 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-__IO  int16_t hADCxConvertedData_Temperature_DegreeCelsius = 0U; /* Value of temperature calculated from ADC conversion data (unit: degree Celcius) */
+__IO int32_t uhADCxConvertedData_Vbat_mVolt = 0;            /* Value of internal voltage reference VrefInt calculated from ADC conversion data (unit: mV) */
+
+__IO int32_t hADCxConvertedData_Temperature_DegreeCelsius = 0; /* Value of temperature calculated from ADC conversion data (unit: degree Celcius) */
+
+__IO _Bool temp_or_volt = 0;// 0 for temperature and 1 for voltage
 
 /* Definitions of environment analog values */
   /* Value of analog reference voltage (Vref+), connected to analog voltage   */
@@ -103,7 +107,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ADC1_Init();
+  MX_ADC1_Init(temp_or_volt);
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   
@@ -123,6 +127,7 @@ int main(void)
     }
 #endif /* USE_TIMEOUT */
   }
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -131,7 +136,6 @@ int main(void)
   {
     
     LL_ADC_Enable(ADC1);
-    
     while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
     {
 #if (USE_TIMEOUT == 1)
@@ -152,7 +156,10 @@ int main(void)
     if (LL_ADC_IsActiveFlag_EOSMP(ADC1)) {
       while (LL_ADC_IsActiveFlag_EOS(ADC1) == 0) {}
       aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
-      hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+      if (temp_or_volt)
+        uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+      else
+        hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
       
     }
     

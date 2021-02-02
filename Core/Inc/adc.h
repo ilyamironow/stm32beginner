@@ -34,7 +34,7 @@
 
 /* USER CODE END Private defines */
 
-void MX_ADC1_Init(void);
+void MX_ADC1_Init(_Bool temp_volt);
 
 /* USER CODE BEGIN Prototypes */
 
