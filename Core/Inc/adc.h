@@ -34,10 +34,10 @@
 
 /* USER CODE END Private defines */
 
-void MX_ADC1_Init(_Bool temp_volt);
+void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+int32_t function(_Bool temp_volt);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

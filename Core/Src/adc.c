@@ -25,15 +25,36 @@
 /* USER CODE END 0 */
 
 /* ADC1 init function */
-void MX_ADC1_Init(_Bool temp_volt)
+void MX_ADC1_Init(void)
 {
+  
+}
+
+/* USER CODE BEGIN 1 */
+int32_t function(_Bool temp_volt) 
+{
+  
+  /* Definitions of environment analog values */
+  /* Value of analog reference voltage (Vref+), connected to analog voltage   */
+  /* supply Vdda (unit: mV).                                                  */
+#define VDDA_APPLI                       (3300U)
+  
+  /* Variable containing ADC conversions results */
+  __IO uint16_t aADCxConvertedData;
+  
+  __IO int32_t uhADCxConvertedData_Vbat_mVolt = 0;            /* Value of internal voltage reference VrefInt calculated from ADC conversion data (unit: mV) */
+  
+  __IO int32_t hADCxConvertedData_Temperature_DegreeCelsius = 0; /* Value of temperature calculated from ADC conversion data (unit: degree Celcius) */
+  
+  __IO int8_t flag =0;
+  
   LL_ADC_InitTypeDef ADC_InitStruct = {0};
   LL_ADC_REG_InitTypeDef ADC_REG_InitStruct = {0};
   LL_ADC_CommonInitTypeDef ADC_CommonInitStruct = {0};
-
+  
   /* Peripheral clock enable */
   LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_ADC);
-
+  
   /** Common config
   */
   ADC_InitStruct.Resolution = LL_ADC_RESOLUTION_12B;
@@ -53,22 +74,22 @@ void MX_ADC1_Init(_Bool temp_volt)
   else 
     LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
   
-   /* Disable ADC deep power down (enabled by default after reset state) */
-   LL_ADC_DisableDeepPowerDown(ADC1);
-   /* Enable ADC internal voltage regulator */
-   LL_ADC_EnableInternalRegulator(ADC1);
-   /* Delay for ADC internal voltage regulator stabilization. */
-   /* Compute number of CPU cycles to wait for, from delay in us. */
-   /* Note: Variable divided by 2 to compensate partially */
-   /* CPU processing cycles (depends on compilation optimization). */
-   /* Note: If system core clock frequency is below 200kHz, wait time */
-   /* is only a few CPU processing cycles. */
-   uint32_t wait_loop_index;
-   wait_loop_index = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
-   while(wait_loop_index != 0)
-     {
-   wait_loop_index--;
-     }
+  /* Disable ADC deep power down (enabled by default after reset state) */
+  LL_ADC_DisableDeepPowerDown(ADC1);
+  /* Enable ADC internal voltage regulator */
+  LL_ADC_EnableInternalRegulator(ADC1);
+  /* Delay for ADC internal voltage regulator stabilization. */
+  /* Compute number of CPU cycles to wait for, from delay in us. */
+  /* Note: Variable divided by 2 to compensate partially */
+  /* CPU processing cycles (depends on compilation optimization). */
+  /* Note: If system core clock frequency is below 200kHz, wait time */
+  /* is only a few CPU processing cycles. */
+  uint32_t wait_loop_index;
+  wait_loop_index = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
+  while(wait_loop_index != 0)
+  {
+    wait_loop_index--;
+  }
   ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV1;
   ADC_CommonInitStruct.Multimode = LL_ADC_MULTI_INDEPENDENT;
   LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC1), &ADC_CommonInitStruct);
@@ -84,10 +105,64 @@ void MX_ADC1_Init(_Bool temp_volt)
     LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_247CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SINGLE_ENDED);
   }
+  
+  LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
+  
+  while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0)
+  {
+#if (USE_TIMEOUT == 1)
+    /* Check Systick counter flag to decrement the time-out value */
+    if (LL_SYSTICK_IsActiveCounterFlag())
+    {
+      if(Timeout-- == 0)
+      {
+        /* Time-out occurred. Set LED to blinking mode */
+        LED_Blinking(LED_BLINK_ERROR);
+      }
+    }
+#endif /* USE_TIMEOUT */
+  }
+  
+  
+  
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    
+    LL_ADC_Enable(ADC1);
+    while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
+    {
+#if (USE_TIMEOUT == 1)
+      /* Check Systick counter flag to decrement the time-out value */
+      if (LL_SYSTICK_IsActiveCounterFlag())
+      {
+        if(Timeout-- == 0)
+        {
+          /* Time-out occurred. Set LED to blinking mode */
+          LED_Blinking(LED_BLINK_ERROR);
+        }
+      }
+#endif /* USE_TIMEOUT */
+    }
+    
+    LL_ADC_REG_StartConversion(ADC1);
+    LL_mDelay(10);
+    if (LL_ADC_IsActiveFlag_EOSMP(ADC1)) {
+      while (LL_ADC_IsActiveFlag_EOS(ADC1) == 0) {}
+      aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
+      if (temp_volt)
+        uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+      else
+        hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+      
+    }
+    flag=flag+1;
+    if (flag == 3)
+      return (temp_volt) ?  uhADCxConvertedData_Vbat_mVolt:hADCxConvertedData_Temperature_DegreeCelsius;
+  }
+  /* USER CODE END WHILE */
 }
-
-/* USER CODE BEGIN 1 */
-
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
