@@ -57,7 +57,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-__IO _Bool temp_or_volt = 1;// 0 for temperature or 1 for voltage
+__IO _Bool temp_or_volt = 0;// 0 for temperature or 1 for voltage
 
 __IO int32_t result;     
 /* USER CODE END 0 */
@@ -89,24 +89,26 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
-  
+
   /* USER CODE BEGIN SysInit */
   
   /* USER CODE END SysInit */
-  
+
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_USART2_UART_Init();
-  
   /* USER CODE BEGIN 2 */
-  /* USER CODE END 2 */
   result = function(temp_or_volt);
-  /* USER CODE BEGIN 3 */
-  while (1) 
-  {  
-    /* USER CODE END 3 */
-  }
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {}
+    /* USER CODE END WHILE */
+
+  
 }
 
 /**
