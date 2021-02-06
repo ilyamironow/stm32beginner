@@ -42,11 +42,8 @@ int32_t function(_Bool temp_volt)
   
   /* Variable containing ADC conversions results */
   __IO uint16_t aADCxConvertedData;
-  
   __IO int32_t uhADCxConvertedData_Vbat_mVolt = 0;            /* Value of internal voltage reference VrefInt calculated from ADC conversion data (unit: mV) */
-  
   __IO int32_t hADCxConvertedData_Temperature_DegreeCelsius = 0; /* Value of temperature calculated from ADC conversion data (unit: degree Celcius) */
-  
   __IO int8_t flag = 0;
   
   LL_ADC_InitTypeDef ADC_InitStruct = {0};
@@ -95,7 +92,6 @@ int32_t function(_Bool temp_volt)
   LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_VREFINT, LL_ADC_SINGLE_ENDED);
   
   LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
-  
   while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0)
   {
 #if (USE_TIMEOUT == 1)
@@ -110,42 +106,32 @@ int32_t function(_Bool temp_volt)
     }
 #endif /* USE_TIMEOUT */
   }
- 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
+  
+  LL_ADC_Enable(ADC1);
+  while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
   {
-    
-    LL_ADC_Enable(ADC1);
-    while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
-    {
 #if (USE_TIMEOUT == 1)
-      /* Check Systick counter flag to decrement the time-out value */
-      if (LL_SYSTICK_IsActiveCounterFlag())
+    /* Check Systick counter flag to decrement the time-out value */
+    if (LL_SYSTICK_IsActiveCounterFlag())
+    {
+      if(Timeout-- == 0)
       {
-        if(Timeout-- == 0)
-        {
-          /* Time-out occurred. Set LED to blinking mode */
-          LED_Blinking(LED_BLINK_ERROR);
-        }
+        /* Time-out occurred. Set LED to blinking mode */
+        LED_Blinking(LED_BLINK_ERROR);
       }
-#endif /* USE_TIMEOUT */
     }
-    
-    LL_ADC_REG_StartConversion(ADC1);
-    
-    while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
-    aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
-    VDDA_APPLI = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
-    //}
-    flag = flag+1;
-    if (flag == 2)
-      break;
+#endif /* USE_TIMEOUT */
   }
-  /* USER CODE END WHILE */ 
-  flag = 0;  
-  FLL_ADC_REG_StopConversion(ADC1);
-   
+  
+  for(int j = 0; j < 260; j++) __NOP();//Tstab is 1 conversion cycle = Tsampling + 12.5 = 247.5+12.5= 260
+  LL_ADC_REG_StartConversion(ADC1);
+  
+  while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
+  aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
+  VDDA_APPLI = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+  
+  LL_ADC_REG_StopConversion(ADC1);
+  
   /** Configure Regular Channel
   */
   if (temp_volt) 
@@ -162,38 +148,21 @@ int32_t function(_Bool temp_volt)
     LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_640CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SINGLE_ENDED);
   }
+    
+  if (temp_volt) 
+    for(int j = 0; j < 260; j++) __NOP(); //Tstab is 1 conversion cycle = Tsampling + 12.5 = 247.5+12.5= 260
+  else 
+    for(int j = 0; j < 653; j++) __NOP(); //Tstab is 1 conversion cycle = Tsampling + 12.5 = 640.5+12.5= 653
+  LL_ADC_REG_StartConversion(ADC1);
   
-  while (1)
-  {
-    
-    LL_ADC_Enable(ADC1);
-    while (LL_ADC_IsActiveFlag_ADRDY(ADC1) == 0)
-    {
-#if (USE_TIMEOUT == 1)
-      /* Check Systick counter flag to decrement the time-out value */
-      if (LL_SYSTICK_IsActiveCounterFlag())
-      {
-        if(Timeout-- == 0)
-        {
-          /* Time-out occurred. Set LED to blinking mode */
-          LED_Blinking(LED_BLINK_ERROR);
-        }
-      }
-#endif /* USE_TIMEOUT */
-    }
-    
-    LL_ADC_REG_StartConversion(ADC1);
-    
-    while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}  
-    aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
-    if (temp_volt)
-      uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
-    else
-      hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
-    flag=flag+1;
-    if (flag == 4)
-      return (temp_volt) ?  uhADCxConvertedData_Vbat_mVolt:hADCxConvertedData_Temperature_DegreeCelsius;
-  }
+  while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
+  aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
+  if (temp_volt)
+    uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+  else
+    hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+  
+  return (temp_volt) ?  uhADCxConvertedData_Vbat_mVolt:hADCxConvertedData_Temperature_DegreeCelsius;
 }
 /* USER CODE END 1 */
 
