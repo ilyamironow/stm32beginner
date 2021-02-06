@@ -6149,7 +6149,7 @@ __STATIC_INLINE void LL_ADC_REG_StartConversion(ADC_TypeDef *ADCx)
   * @param  ADCx ADC instance
   * @retval None
   */
-__STATIC_INLINE void LL_ADC_REG_StopConversion(ADC_TypeDef *ADCx)
+__STATIC_INLINE void FLL_ADC_REG_StopConversion(ADC_TypeDef *ADCx)
 {
   /* Note: Write register with some additional bits forced to state reset     */
   /*       instead of modifying only the selected bit for this function,      */

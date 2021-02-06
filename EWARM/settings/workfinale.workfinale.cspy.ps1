@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\settings\workfinale.workfinale.general.xcl" --backend -f "C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\settings\workfinale.workfinale.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\workfinale.workfinale.general.xcl" --backend -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\workfinale.workfinale.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\settings\workfinale.workfinale.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\dev\Documents\STM_projecti\workfinale\EWARM\settings\workfinale.workfinale.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\workfinale.workfinale.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\settings\workfinale.workfinale.driver.xcl" 
 }

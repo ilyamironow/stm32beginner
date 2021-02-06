@@ -110,9 +110,7 @@ int32_t function(_Bool temp_volt)
     }
 #endif /* USE_TIMEOUT */
   }
-  
-  
-  
+ 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -135,95 +133,34 @@ int32_t function(_Bool temp_volt)
     }
     
     LL_ADC_REG_StartConversion(ADC1);
-    //LL_mDelay(4);
     
-    //if (LL_ADC_IsActiveFlag_EOSMP(ADC1)) {
-    //while (LL_ADC_IsActiveFlag_EOS(ADC1) == 0) {}
     while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
     aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
     VDDA_APPLI = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
     //}
-    flag =flag+1;
+    flag = flag+1;
     if (flag == 2)
       break;
-      //return VDDA_APPLI;
   }
   /* USER CODE END WHILE */ 
   flag = 0;  
-  LL_ADC_REG_StopConversion(ADC1);
-  //LL_ADC_Disable(ADC1);
-//LL_ADC_InitTypeDef ADC_InitStruct = {0};
-  //LL_ADC_REG_InitTypeDef ADC_REG_InitStruct = {0};
-  //LL_ADC_CommonInitTypeDef ADC_CommonInitStruct = {0};
-  
-  /* Peripheral clock enable */
-  //LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_ADC);
-  
-  /** Common config
-  */
-  /*ADC_InitStruct.Resolution = LL_ADC_RESOLUTION_12B;
-  ADC_InitStruct.DataAlignment = LL_ADC_DATA_ALIGN_RIGHT;
-  ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
-  LL_ADC_Init(ADC1, &ADC_InitStruct);
-  ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_SOFTWARE;
-  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
-  ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
-  ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
-  ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_NONE;
-  ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_OVERWRITTEN;
-  LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);*/
+  FLL_ADC_REG_StopConversion(ADC1);
+   
   /** Configure Regular Channel
   */
   if (temp_volt) 
-    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
-  else 
-    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
-  
-  /* Disable ADC deep power down (enabled by default after reset state) */
-  LL_ADC_DisableDeepPowerDown(ADC1);
-  /* Enable ADC internal voltage regulator */
-  LL_ADC_EnableInternalRegulator(ADC1);
-  /* Delay for ADC internal voltage regulator stabilization. */
-  /* Compute number of CPU cycles to wait for, from delay in us. */
-  /* Note: Variable divided by 2 to compensate partially */
-  /* CPU processing cycles (depends on compilation optimization). */
-  /* Note: If system core clock frequency is below 200kHz, wait time */
-  /* is only a few CPU processing cycles. */
-  //uint32_t wait_loop_index;
-  //wait_loop_index = ((LL_ADC_DELAY_INTERNAL_REGUL_STAB_US * (SystemCoreClock / (100000 * 2))) / 10);
-  while(wait_loop_index != 0)
   {
-    wait_loop_index--;
-  }
-ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV1;
-ADC_CommonInitStruct.Multimode = LL_ADC_MULTI_INDEPENDENT;
-LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC1), &ADC_CommonInitStruct);
-  
-  if (temp_volt) {
+    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
     LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VBAT);
     LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_VBAT, LL_ADC_SAMPLINGTIME_247CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_VBAT, LL_ADC_SINGLE_ENDED);
-  } else {
+  }
+  else 
+  {
+    LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
     LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_TEMPSENSOR);
     LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_640CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SINGLE_ENDED);
-  }
-  
-LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
-  
-  while (LL_ADC_IsCalibrationOnGoing(ADC1) != 0)
-  {
-#if (USE_TIMEOUT == 1)
-    /* Check Systick counter flag to decrement the time-out value */
-    if (LL_SYSTICK_IsActiveCounterFlag())
-    {
-      if(Timeout-- == 0)
-      {
-        /* Time-out occurred. Set LED to blinking mode */
-        LED_Blinking(LED_BLINK_ERROR);
-      }
-    }
-#endif /* USE_TIMEOUT */
   }
   
   while (1)
@@ -246,18 +183,13 @@ LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
     }
     
     LL_ADC_REG_StartConversion(ADC1);
-    //temp_volt ? LL_mDelay(5) : LL_mDelay(12);
-    //LL_mDelay(120);
-    //if (LL_ADC_IsActiveFlag_EOSMP(ADC1)) {
-    // while (LL_ADC_IsActiveFlag_EOS(ADC1) == 0) {}
+    
     while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}  
     aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
     if (temp_volt)
       uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
     else
       hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
-    
-    //}
     flag=flag+1;
     if (flag == 4)
       return (temp_volt) ?  uhADCxConvertedData_Vbat_mVolt:hADCxConvertedData_Temperature_DegreeCelsius;
