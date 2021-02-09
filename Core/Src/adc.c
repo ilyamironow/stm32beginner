@@ -84,11 +84,11 @@ int32_t function(_Bool temp_volt)
   {
     wait_loop_index--;
   }
-  ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV1;
+  ADC_CommonInitStruct.CommonClock = LL_ADC_CLOCK_ASYNC_DIV32;
   ADC_CommonInitStruct.Multimode = LL_ADC_MULTI_INDEPENDENT;
   LL_ADC_CommonInit(__LL_ADC_COMMON_INSTANCE(ADC1), &ADC_CommonInitStruct);
   LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VREFINT);
-  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_VREFINT, LL_ADC_SAMPLINGTIME_247CYCLES_5);
+  LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_VREFINT, LL_ADC_SAMPLINGTIME_12CYCLES_5);
   LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_VREFINT, LL_ADC_SINGLE_ENDED);
   
   LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
@@ -123,14 +123,15 @@ int32_t function(_Bool temp_volt)
 #endif /* USE_TIMEOUT */
   }
   
-  for(int j = 0; j < 260; j++) __NOP();//Tstab is 1 conversion cycle = Tsampling + 12.5 = 247.5+12.5= 260
-  LL_ADC_REG_StartConversion(ADC1);
+  LL_ADC_REG_StartConversion(ADC1); //for stabilization and converting accurately
+  while (LL_ADC_REG_IsConversionOngoing(ADC1)) {}
+  while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   
-  while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
+  LL_ADC_REG_StartConversion(ADC1);
+  while (LL_ADC_REG_IsConversionOngoing(ADC1)) {}
+  while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
   VDDA_APPLI = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
-  
-  LL_ADC_REG_StopConversion(ADC1);
   
   /** Configure Regular Channel
   */
@@ -138,24 +139,24 @@ int32_t function(_Bool temp_volt)
   {
     LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_VBAT);
     LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VBAT);
-    LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_VBAT, LL_ADC_SAMPLINGTIME_247CYCLES_5);
+    LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_VBAT, LL_ADC_SAMPLINGTIME_24CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_VBAT, LL_ADC_SINGLE_ENDED);
   }
   else 
   {
     LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
     LL_ADC_REG_SetSequencerRanks(ADC1, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_TEMPSENSOR);
-    LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_640CYCLES_5);
+    LL_ADC_SetChannelSamplingTime(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_47CYCLES_5);
     LL_ADC_SetChannelSingleDiff(ADC1, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SINGLE_ENDED);
   }
     
-  if (temp_volt) 
-    for(int j = 0; j < 260; j++) __NOP(); //Tstab is 1 conversion cycle = Tsampling + 12.5 = 247.5+12.5= 260
-  else 
-    for(int j = 0; j < 653; j++) __NOP(); //Tstab is 1 conversion cycle = Tsampling + 12.5 = 640.5+12.5= 653
-  LL_ADC_REG_StartConversion(ADC1);
+  LL_ADC_REG_StartConversion(ADC1); //for stabilization and converting accurately
+  while (LL_ADC_REG_IsConversionOngoing(ADC1)) {}
+  while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   
-  while (LL_ADC_IsActiveFlag_EOC(ADC1) == 0) {}
+  LL_ADC_REG_StartConversion(ADC1);
+  while (LL_ADC_REG_IsConversionOngoing(ADC1)) {}
+  while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
   if (temp_volt)
     uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
