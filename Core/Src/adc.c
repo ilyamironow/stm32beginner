@@ -36,7 +36,7 @@ int32_t function(_Bool temp_volt)
   /* Definitions of environment analog values */
   /* Value of analog reference voltage (Vref+), connected to analog voltage   */
   /* supply Vdda (unit: mV).                                                  */
-  int32_t VDDA_APPLI;           
+  int32_t vdda_appli;           
   
   /* Variable containing ADC conversions results */
   uint16_t aADCxConvertedData;
@@ -52,29 +52,6 @@ int32_t function(_Bool temp_volt)
   
   /*    set active ADC1 configuration to default    */
   LL_ADC_DeInit(ADC1);
-  LL_ADC_WriteReg(ADC1, ISR, 0);
-  LL_ADC_WriteReg(ADC1, IER, 0);
-  LL_ADC_WriteReg(ADC1, CR, 0);
-  LL_ADC_WriteReg(ADC1, CFGR, 0);
-  LL_ADC_WriteReg(ADC1, CFGR2, 0);
-  LL_ADC_WriteReg(ADC1, SMPR1, 0);
-  LL_ADC_WriteReg(ADC1, SMPR2, 0);
-  LL_ADC_WriteReg(ADC1, TR1, 0);
-  LL_ADC_WriteReg(ADC1, TR2, 0); 
-  LL_ADC_WriteReg(ADC1, TR3, 0);
-  LL_ADC_WriteReg(ADC1, SQR1, 0);
-  LL_ADC_WriteReg(ADC1, SQR2, 0);
-  LL_ADC_WriteReg(ADC1, SQR3, 0);
-  LL_ADC_WriteReg(ADC1, SQR4, 0);
-  LL_ADC_WriteReg(ADC1, JSQR, 0);
-  LL_ADC_WriteReg(ADC1, OFR1, 0);
-  LL_ADC_WriteReg(ADC1, OFR2, 0);
-  LL_ADC_WriteReg(ADC1, OFR3, 0); 
-  LL_ADC_WriteReg(ADC1, OFR4, 0);
-  LL_ADC_WriteReg(ADC1, AWD2CR, 0);
-  LL_ADC_WriteReg(ADC1, AWD3CR, 0);
-  LL_ADC_WriteReg(ADC1, DIFSEL, 0);
-  LL_ADC_WriteReg(ADC1, CALFACT, 0);
   
   /** Common config
   */
@@ -154,7 +131,7 @@ int32_t function(_Bool temp_volt)
   while (LL_ADC_REG_IsConversionOngoing(ADC1)) {}
   while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
-  VDDA_APPLI = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+  vdda_appli = __LL_ADC_CALC_VREFANALOG_VOLTAGE(aADCxConvertedData, LL_ADC_RESOLUTION_12B);
   
   /** Configure Regular Channel
   */
@@ -182,35 +159,12 @@ int32_t function(_Bool temp_volt)
   while (LL_ADC_REG_IsStopConversionOngoing(ADC1)) {}
   aADCxConvertedData = LL_ADC_REG_ReadConversionData12(ADC1);
   if (temp_volt)
-    uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+    uhADCxConvertedData_Vbat_mVolt = 3*__LL_ADC_CALC_DATA_TO_VOLTAGE(vdda_appli, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
   else
-    hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(VDDA_APPLI, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
+    hADCxConvertedData_Temperature_DegreeCelsius = __LL_ADC_CALC_TEMPERATURE(vdda_appli, aADCxConvertedData, LL_ADC_RESOLUTION_12B);
   
   /*    set active ADC1 configuration to default    */
   LL_ADC_DeInit(ADC1);
-  LL_ADC_WriteReg(ADC1, ISR, 0);
-  LL_ADC_WriteReg(ADC1, IER, 0);
-  LL_ADC_WriteReg(ADC1, CR, 0);
-  LL_ADC_WriteReg(ADC1, CFGR, 0);
-  LL_ADC_WriteReg(ADC1, CFGR2, 0);
-  LL_ADC_WriteReg(ADC1, SMPR1, 0);
-  LL_ADC_WriteReg(ADC1, SMPR2, 0);
-  LL_ADC_WriteReg(ADC1, TR1, 0);
-  LL_ADC_WriteReg(ADC1, TR2, 0); 
-  LL_ADC_WriteReg(ADC1, TR3, 0);
-  LL_ADC_WriteReg(ADC1, SQR1, 0);
-  LL_ADC_WriteReg(ADC1, SQR2, 0);
-  LL_ADC_WriteReg(ADC1, SQR3, 0);
-  LL_ADC_WriteReg(ADC1, SQR4, 0);
-  LL_ADC_WriteReg(ADC1, JSQR, 0);
-  LL_ADC_WriteReg(ADC1, OFR1, 0);
-  LL_ADC_WriteReg(ADC1, OFR2, 0);
-  LL_ADC_WriteReg(ADC1, OFR3, 0); 
-  LL_ADC_WriteReg(ADC1, OFR4, 0);
-  LL_ADC_WriteReg(ADC1, AWD2CR, 0);
-  LL_ADC_WriteReg(ADC1, AWD3CR, 0);
-  LL_ADC_WriteReg(ADC1, DIFSEL, 0);
-  LL_ADC_WriteReg(ADC1, CALFACT, 0);
   
   return (temp_volt) ?  uhADCxConvertedData_Vbat_mVolt:hADCxConvertedData_Temperature_DegreeCelsius;
 }
