@@ -197,6 +197,24 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32l4xx.s).                    */
 /******************************************************************************/
 
+/**
+  * @brief This function handles LPTIM2 global interrupt.
+  */
+void LPTIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN LPTIM2_IRQn 0 */
+  
+  if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2))
+  {
+    //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_13);
+    LL_LPTIM_ClearFLAG_ARRM(LPTIM2);
+  }
+  /* USER CODE END LPTIM2_IRQn 0 */
+  /* USER CODE BEGIN LPTIM2_IRQn 1 */
+  
+  /* USER CODE END LPTIM2_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

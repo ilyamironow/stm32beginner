@@ -28,7 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_ll_adc.h"
+#include "stm32l4xx_ll_lptim.h"
 #include "stm32l4xx_ll_crs.h"
 #include "stm32l4xx_ll_rcc.h"
 #include "stm32l4xx_ll_bus.h"
@@ -81,8 +81,6 @@ void Error_Handler(void);
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin LL_GPIO_PIN_3
 #define USART_RX_GPIO_Port GPIOA
-#define SMPS_EN_Pin LL_GPIO_PIN_4
-#define SMPS_EN_GPIO_Port GPIOA
 #define SMPS_V1_Pin LL_GPIO_PIN_5
 #define SMPS_V1_GPIO_Port GPIOA
 #define SMPS_PG_Pin LL_GPIO_PIN_6

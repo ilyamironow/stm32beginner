@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "adc.h"
+#include "lptim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -57,9 +57,6 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-__IO _Bool temp_or_volt = 0;// 0 for temperature or 1 for voltage
-
-__IO int32_t result;     
 /* USER CODE END 0 */
 
 /**
@@ -91,24 +88,43 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  
+
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ADC1_Init();
+  MX_LPTIM2_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  result = function(temp_or_volt);
+  
+  /* Enter STOP 2 mode */
+  //LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+  /* Set SLEEPDEEP bit of Cortex System Control Register */
+  //LL_LPM_EnableDeepSleep();  
+  /* Request Wait For Interrupt */
+  //__WFI();
+  //LL_TIM_EnableAllOutputs(TIM1);
+  //before this stop2 should be enabled
+  
+  
+  
+  Start_LPTIM2_Counter();
+  
+  
+  
+  //LL_LPTIM_Disable(LPTIM2);
+  
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {}
+  {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+  }
   /* USER CODE END 3 */
 }
 
@@ -123,6 +139,21 @@ void SystemClock_Config(void)
   {
   }
   LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE1);
+  LL_RCC_HSI_Enable();
+
+   /* Wait till HSI is ready */
+  while(LL_RCC_HSI_IsReady() != 1)
+  {
+
+  }
+  LL_RCC_HSI_SetCalibTrimming(16);
+  LL_RCC_LSI_Enable();
+
+   /* Wait till LSI is ready */
+  while(LL_RCC_LSI_IsReady() != 1)
+  {
+
+  }
   LL_RCC_MSI_Enable();
 
    /* Wait till MSI is ready */
@@ -156,7 +187,8 @@ void SystemClock_Config(void)
   LL_Init1msTick(80000000);
 
   LL_SetSystemCoreClock(80000000);
-  LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_PCLK1);
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_HSI);
+  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE_LSI);
 }
 
 /* USER CODE BEGIN 4 */
