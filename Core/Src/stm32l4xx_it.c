@@ -27,7 +27,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
-
+void Start_LPTIM2_Counter(void);
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -198,21 +198,27 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles LPTIM2 global interrupt.
+  * @brief This function handles LPTIM1 global interrupt.
   */
-void LPTIM2_IRQHandler(void)
+void LPTIM1_IRQHandler(void)
 {
-  /* USER CODE BEGIN LPTIM2_IRQn 0 */
-  
-  if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2))
+  /* USER CODE BEGIN LPTIM1_IRQn 0 */
+  if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 1) 
   {
-    //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_13);
-    LL_LPTIM_ClearFLAG_ARRM(LPTIM2);
+    Start_LPTIM2_Counter();
+    LL_LPTIM_ClearFLAG_ARRM(LPTIM1);
+    /* Enter STOP 2 mode */
+    LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+    
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    LL_LPM_EnableDeepSleep();  
+ 
+    LL_LPM_EnableSleepOnExit();
   }
-  /* USER CODE END LPTIM2_IRQn 0 */
-  /* USER CODE BEGIN LPTIM2_IRQn 1 */
+  /* USER CODE END LPTIM1_IRQn 0 */
+  /* USER CODE BEGIN LPTIM1_IRQn 1 */
   
-  /* USER CODE END LPTIM2_IRQn 1 */
+  /* USER CODE END LPTIM1_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

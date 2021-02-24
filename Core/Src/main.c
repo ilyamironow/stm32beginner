@@ -95,24 +95,43 @@ int main(void)
   MX_GPIO_Init();
   MX_LPTIM2_Init();
   MX_USART2_UART_Init();
+  MX_LPTIM1_Init();
   /* USER CODE BEGIN 2 */
   
+  /* Put STM32 is STOP2 initially*/
+  
+  //while 
+  /*      some trigger event that wakes up STM32      */
+  
+  /*     enable LPTIM with proper signal type     */
+  
+  /*     disable LPTIM      */
+  
+  /*     Put STM32 is STOP2 again*/
+  
+  LL_LPTIM_EnableIT_ARRM(LPTIM1);
+  LL_LPTIM_Enable(LPTIM1);
+  
+  LL_LPTIM_SetAutoReload(LPTIM1, 32000); //ARR interrupt is each second
+  
+  LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_CONTINUOUS);
+  
   /* Enter STOP 2 mode */
-  //LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+  LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
   /* Set SLEEPDEEP bit of Cortex System Control Register */
-  //LL_LPM_EnableDeepSleep();  
+  LL_LPM_EnableDeepSleep();  
   /* Request Wait For Interrupt */
-  //__WFI();
-  //LL_TIM_EnableAllOutputs(TIM1);
-  //before this stop2 should be enabled
+  __WFI();
   
   
   
-  Start_LPTIM2_Counter();
   
-  
+  //LL_mDelay(2000);
   
   //LL_LPTIM_Disable(LPTIM2);
+  
+  
+  
   
   
   /* USER CODE END 2 */
@@ -189,6 +208,7 @@ void SystemClock_Config(void)
   LL_SetSystemCoreClock(80000000);
   LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_HSI);
   LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE_LSI);
+  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE_LSI);
 }
 
 /* USER CODE BEGIN 4 */
