@@ -23,11 +23,16 @@
 #include "stm32l4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+void LED_mode_execution(enum mode selected_mode);
+
+enum mode cur_mode = threetimesshort;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
 void Start_LPTIM2_Counter(void);
+
+void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr);
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -206,6 +211,14 @@ void LPTIM1_IRQHandler(void)
   if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 1) 
   {
     Start_LPTIM2_Counter();
+    LED_mode_execution(cur_mode);
+    LL_LPTIM_Disable(LPTIM2);
+    
+    if (cur_mode == threetimesshort)
+      cur_mode = longandtwoshort;
+    else
+      cur_mode = threetimesshort;
+    
     LL_LPTIM_ClearFLAG_ARRM(LPTIM1);
     /* Enter STOP 2 mode */
     LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);

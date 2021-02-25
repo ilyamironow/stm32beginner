@@ -69,7 +69,10 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+enum mode {
+    threetimesshort,
+    longandtwoshort
+};
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

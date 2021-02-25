@@ -25,6 +25,7 @@ build lptim.pbi : index lptim.xcl
 build main.pbi : index main.xcl
 build stm32l4xx_it.pbi : index stm32l4xx_it.xcl
 build usart.pbi : index usart.xcl
+build WVT_LED.pbi : index WVT_LED.xcl
 build system_stm32l4xx.pbi : index system_stm32l4xx.xcl
 build stm32l4xx_ll_dma.pbi : index stm32l4xx_ll_dma.xcl
 build stm32l4xx_ll_exti.pbi : index stm32l4xx_ll_exti.xcl
@@ -35,9 +36,9 @@ build stm32l4xx_ll_rcc.pbi : index stm32l4xx_ll_rcc.xcl
 build stm32l4xx_ll_usart.pbi : index stm32l4xx_ll_usart.xcl
 build stm32l4xx_ll_utils.pbi : index stm32l4xx_ll_utils.xcl
 build led_indicator_part0.pbi : link gpio.pbi lptim.pbi main.pbi stm32l4xx_it.pbi
-build led_indicator_part1.pbi : link usart.pbi system_stm32l4xx.pbi stm32l4xx_ll_dma.pbi stm32l4xx_ll_exti.pbi
-build led_indicator_part2.pbi : link stm32l4xx_ll_gpio.pbi stm32l4xx_ll_lptim.pbi stm32l4xx_ll_pwr.pbi stm32l4xx_ll_rcc.pbi
-build led_indicator_part3.pbi : link stm32l4xx_ll_usart.pbi stm32l4xx_ll_utils.pbi
+build led_indicator_part1.pbi : link usart.pbi WVT_LED.pbi system_stm32l4xx.pbi stm32l4xx_ll_dma.pbi
+build led_indicator_part2.pbi : link stm32l4xx_ll_exti.pbi stm32l4xx_ll_gpio.pbi stm32l4xx_ll_lptim.pbi stm32l4xx_ll_pwr.pbi
+build led_indicator_part3.pbi : link stm32l4xx_ll_rcc.pbi stm32l4xx_ll_usart.pbi stm32l4xx_ll_utils.pbi
 build led_indicator.pbd : link led_indicator_part0.pbi led_indicator_part1.pbi led_indicator_part2.pbi led_indicator_part3.pbi
 build led_indicator.pbw : browsedata led_indicator.pbd
 

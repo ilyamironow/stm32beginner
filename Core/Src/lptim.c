@@ -83,16 +83,21 @@ void Start_LPTIM2_Counter(void)
   
   LL_LPTIM_EnableIT_ARRM(LPTIM2);
   LL_LPTIM_Enable(LPTIM2);
+}
+
+void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr)
+{
+  /* rep-1 are rep Autoreload matches */
+  LL_LPTIM_SetRepetition(LPTIM2, rep - 1);
   
-  /* 5 seconds are 5 Autoreload matches */
-  LL_LPTIM_SetRepetition(LPTIM2, 5 - 1);
+  LL_LPTIM_SetCompare(LPTIM2, cmp); //probably change this later 
+  LL_LPTIM_SetAutoReload(LPTIM2, arr);//wrong - ARR interrupt is each second
   
-  LL_LPTIM_SetCompare(LPTIM2, 16000); //probably change this later 
-  LL_LPTIM_SetAutoReload(LPTIM2, 32000);//wrong - ARR interrupt is each second
-  
-  LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_CONTINUOUS);
-  while (LL_LPTIM_IsActiveFlag_UE(LPTIM2) == 0) {}
-  LL_LPTIM_Disable(LPTIM2);
+  while (LL_LPTIM_IsActiveFlag_UE(LPTIM2) == 0) 
+  {
+    LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
+    while (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 0) {}
+  }
   
 }
 /* USER CODE END 1 */
