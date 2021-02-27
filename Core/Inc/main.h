@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+
 #include "stm32l4xx_ll_lptim.h"
 #include "stm32l4xx_ll_crs.h"
 #include "stm32l4xx_ll_rcc.h"
@@ -70,8 +71,11 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 enum mode {
-    threetimesshort,
-    longandtwoshort
+    THREE_SHORT,
+    LONG_AND_TWO_SHORT,
+    TWO_VERY_SHORT,
+    FIVE_SHORT,
+    TWO_LONG
 };
 /* USER CODE END EFP */
 

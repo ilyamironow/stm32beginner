@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * File Name          : LPTIM.c
-  * Description        : This file provides code for the configuration
-  *                      of the LPTIM instances.
+  * @file    lptim.c
+  * @brief   This file provides code for the configuration
+  *          of the LPTIM instances.
   ******************************************************************************
   * @attention
   *
@@ -21,12 +21,18 @@
 #include "lptim.h"
 
 /* USER CODE BEGIN 0 */
-
+#if !defined  (LSE_VALUE)
+#define LSE_VALUE    32768U     /*!< Value of the LSE oscillator in Hz */
+#endif /* LSE_VALUE */
 /* USER CODE END 0 */
 
 /* LPTIM1 init function */
 void MX_LPTIM1_Init(void)
 {
+
+  /* USER CODE BEGIN LPTIM1_Init 0 */
+
+  /* USER CODE END LPTIM1_Init 0 */
 
   /* Peripheral clock enable */
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_LPTIM1);
@@ -35,19 +41,29 @@ void MX_LPTIM1_Init(void)
   NVIC_SetPriority(LPTIM1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(LPTIM1_IRQn);
 
+  /* USER CODE BEGIN LPTIM1_Init 1 */
+
+  /* USER CODE END LPTIM1_Init 1 */
   LL_LPTIM_SetClockSource(LPTIM1, LL_LPTIM_CLK_SOURCE_INTERNAL);
-  LL_LPTIM_SetPrescaler(LPTIM1, LL_LPTIM_PRESCALER_DIV1);
+  LL_LPTIM_SetPrescaler(LPTIM1, LL_LPTIM_PRESCALER_DIV64);
   LL_LPTIM_SetPolarity(LPTIM1, LL_LPTIM_OUTPUT_POLARITY_REGULAR);
   LL_LPTIM_SetUpdateMode(LPTIM1, LL_LPTIM_UPDATE_MODE_IMMEDIATE);
   LL_LPTIM_SetCounterMode(LPTIM1, LL_LPTIM_COUNTER_MODE_INTERNAL);
   LL_LPTIM_TrigSw(LPTIM1);
-  //LL_LPTIM_SetInput1Src(LPTIM1, LL_LPTIM_INPUT1_SRC_GPIO);
-  //LL_LPTIM_SetInput2Src(LPTIM1, LL_LPTIM_INPUT2_SRC_GPIO);
+  LL_LPTIM_SetInput1Src(LPTIM1, LL_LPTIM_INPUT1_SRC_GPIO);
+  LL_LPTIM_SetInput2Src(LPTIM1, LL_LPTIM_INPUT2_SRC_GPIO);
+  /* USER CODE BEGIN LPTIM1_Init 2 */
+
+  /* USER CODE END LPTIM1_Init 2 */
 
 }
 /* LPTIM2 init function */
 void MX_LPTIM2_Init(void)
 {
+
+  /* USER CODE BEGIN LPTIM2_Init 0 */
+
+  /* USER CODE END LPTIM2_Init 0 */
 
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -66,13 +82,19 @@ void MX_LPTIM2_Init(void)
   GPIO_InitStruct.Alternate = LL_GPIO_AF_14;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /* USER CODE BEGIN LPTIM2_Init 1 */
+
+  /* USER CODE END LPTIM2_Init 1 */
   LL_LPTIM_SetClockSource(LPTIM2, LL_LPTIM_CLK_SOURCE_INTERNAL);
-  LL_LPTIM_SetPrescaler(LPTIM2, LL_LPTIM_PRESCALER_DIV1);
+  LL_LPTIM_SetPrescaler(LPTIM2, LL_LPTIM_PRESCALER_DIV64);
   LL_LPTIM_SetPolarity(LPTIM2, LL_LPTIM_OUTPUT_POLARITY_REGULAR);
   LL_LPTIM_SetUpdateMode(LPTIM2, LL_LPTIM_UPDATE_MODE_IMMEDIATE);
   LL_LPTIM_SetCounterMode(LPTIM2, LL_LPTIM_COUNTER_MODE_INTERNAL);
   LL_LPTIM_TrigSw(LPTIM2);
   LL_LPTIM_SetInput1Src(LPTIM2, LL_LPTIM_INPUT1_SRC_GPIO);
+  /* USER CODE BEGIN LPTIM2_Init 2 */
+
+  /* USER CODE END LPTIM2_Init 2 */
 
 }
 
@@ -87,6 +109,8 @@ void Start_LPTIM2_Counter(void)
 
 void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr)
 {
+  cmp = cmp*LSE_VALUE/(64*1000);
+  arr = arr*LSE_VALUE/(64*1000);
   /* rep-1 are rep Autoreload matches */
   LL_LPTIM_SetRepetition(LPTIM2, rep - 1);
   
@@ -96,9 +120,13 @@ void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr)
   while (LL_LPTIM_IsActiveFlag_UE(LPTIM2) == 0) 
   {
     LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
-    while (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 0) {}
+    while (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2) == 0) {}
   }
-  
+}
+
+void Stop_LPTIM2_Counter(void)
+{
+  LL_LPTIM_Disable(LPTIM2);
 }
 /* USER CODE END 1 */
 

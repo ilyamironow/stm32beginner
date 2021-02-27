@@ -35,6 +35,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#if !defined  (LSE_VALUE)
+#define LSE_VALUE    32768U     /*!< Value of the LSE oscillator in Hz */
+#endif /* LSE_VALUE */
+
+#define LED_MODES_NUMBER 5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -45,7 +50,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+void LED_mode_execution(enum mode selected_mode);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,48 +103,32 @@ int main(void)
   MX_LPTIM1_Init();
   /* USER CODE BEGIN 2 */
   
-  /* Put STM32 is STOP2 initially*/
-  
-  //while 
-  /*      some trigger event that wakes up STM32      */
-  
-  /*     enable LPTIM with proper signal type     */
-  
-  /*     disable LPTIM      */
-  
-  /*     Put STM32 is STOP2 again*/
-  
   LL_LPTIM_EnableIT_ARRM(LPTIM1);
   LL_LPTIM_Enable(LPTIM1);
   
-  LL_LPTIM_SetAutoReload(LPTIM1, 32000); //ARR interrupt is each second
+  LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/64); //ARR interrupt is each second
   
-  LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_CONTINUOUS);
-  
-  /* Enter STOP 2 mode */
-  LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
-  /* Set SLEEPDEEP bit of Cortex System Control Register */
-  LL_LPM_EnableDeepSleep();  
-  /* Request Wait For Interrupt */
-  __WFI();
-  
-  
-  
-  
-  //LL_mDelay(2000);
-  
-  //LL_LPTIM_Disable(LPTIM2);
-  
-  
-  
-  
-  
+  enum mode cur_mode = THREE_SHORT;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
+    
+    /* Enter STOP 2 mode */
+    LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    LL_LPM_EnableDeepSleep();  
+    /* Request Wait For Interrupt */
+    __WFI();  
+    
+    Start_LPTIM2_Counter();
+    LED_mode_execution(cur_mode);
+    Stop_LPTIM2_Counter();
+    
+    cur_mode = (enum mode) ((cur_mode + 1) % LED_MODES_NUMBER);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -166,13 +155,6 @@ void SystemClock_Config(void)
 
   }
   LL_RCC_HSI_SetCalibTrimming(16);
-  LL_RCC_LSI_Enable();
-
-   /* Wait till LSI is ready */
-  while(LL_RCC_LSI_IsReady() != 1)
-  {
-
-  }
   LL_RCC_MSI_Enable();
 
    /* Wait till MSI is ready */
@@ -183,6 +165,15 @@ void SystemClock_Config(void)
   LL_RCC_MSI_EnableRangeSelection();
   LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_6);
   LL_RCC_MSI_SetCalibTrimming(0);
+  LL_PWR_EnableBkUpAccess();
+  LL_RCC_LSE_SetDriveCapability(LL_RCC_LSEDRIVE_LOW);
+  LL_RCC_LSE_Enable();
+
+   /* Wait till LSE is ready */
+  while(LL_RCC_LSE_IsReady() != 1)
+  {
+
+  }
   LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_MSI, LL_RCC_PLLM_DIV_1, 40, LL_RCC_PLLR_DIV_2);
   LL_RCC_PLL_EnableDomain_SYS();
   LL_RCC_PLL_Enable();
@@ -207,8 +198,8 @@ void SystemClock_Config(void)
 
   LL_SetSystemCoreClock(80000000);
   LL_RCC_SetUSARTClockSource(LL_RCC_USART2_CLKSOURCE_HSI);
-  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE_LSI);
-  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE_LSI);
+  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM2_CLKSOURCE_LSE);
+  LL_RCC_SetLPTIMClockSource(LL_RCC_LPTIM1_CLKSOURCE_LSE);
 }
 
 /* USER CODE BEGIN 4 */
