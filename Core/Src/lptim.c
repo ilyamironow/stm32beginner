@@ -114,13 +114,12 @@ void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr)
   /* rep-1 are rep Autoreload matches */
   LL_LPTIM_SetRepetition(LPTIM2, rep - 1);
   
-  LL_LPTIM_SetCompare(LPTIM2, cmp); //probably change this later 
-  LL_LPTIM_SetAutoReload(LPTIM2, arr);//wrong - ARR interrupt is each second
+  LL_LPTIM_SetCompare(LPTIM2, cmp);
+  LL_LPTIM_SetAutoReload(LPTIM2, arr);
   
   while (LL_LPTIM_IsActiveFlag_UE(LPTIM2) == 0) 
   {
     LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
-    while (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2) == 0) {}
   }
 }
 

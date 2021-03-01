@@ -38,8 +38,6 @@
 #if !defined  (LSE_VALUE)
 #define LSE_VALUE    32768U     /*!< Value of the LSE oscillator in Hz */
 #endif /* LSE_VALUE */
-
-#define LED_MODES_NUMBER 5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -124,10 +122,7 @@ int main(void)
     /* Request Wait For Interrupt */
     __WFI();  
     
-    Start_LPTIM2_Counter();
     LED_mode_execution(cur_mode);
-    Stop_LPTIM2_Counter();
-    
     cur_mode = (enum mode) ((cur_mode + 1) % LED_MODES_NUMBER);
     /* USER CODE END WHILE */
 

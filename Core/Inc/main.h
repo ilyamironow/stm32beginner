@@ -75,7 +75,8 @@ enum mode {
     LONG_AND_TWO_SHORT,
     TWO_VERY_SHORT,
     FIVE_SHORT,
-    TWO_LONG
+    TWO_LONG,
+    LED_MODES_NUMBER
 };
 /* USER CODE END EFP */
 
