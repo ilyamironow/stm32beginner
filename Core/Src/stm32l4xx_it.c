@@ -43,7 +43,13 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+uint8_t cycles = 1;
 
+extern enum mode cur_mode;
+
+void LED_mode_execution(enum mode selected_mode);
+
+extern uint8_t repetition;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -207,11 +213,45 @@ void LPTIM1_IRQHandler(void)
   if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 1) 
   {
     LL_LPTIM_ClearFLAG_ARRM(LPTIM1);
+    LED_mode_execution(cur_mode);
   }
   /* USER CODE END LPTIM1_IRQn 0 */
   /* USER CODE BEGIN LPTIM1_IRQn 1 */
   
   /* USER CODE END LPTIM1_IRQn 1 */
+}
+
+/**
+  * @brief This function handles LPTIM2 global interrupt.
+  */
+void LPTIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN LPTIM2_IRQn 0 */
+  if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2) == 1) 
+  {
+    LL_LPTIM_ClearFLAG_ARRM(LPTIM2);
+    if (cycles != repetition)
+    {
+      cycles = cycles + 1;
+      LED_mode_execution(cur_mode);
+    }
+    else 
+    {
+      cycles = 1;
+      cur_mode = (enum mode) ((cur_mode + 1) % LED_MODES_NUMBER);
+      LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
+      /* Enter STOP 2 mode */
+      LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+      /* Set SLEEPDEEP bit of Cortex System Control Register */
+      LL_LPM_EnableDeepSleep();  
+      /* Request Wait For Interrupt */
+      LL_LPM_EnableSleepOnExit();
+    }
+  }
+  /* USER CODE END LPTIM2_IRQn 0 */
+  /* USER CODE BEGIN LPTIM2_IRQn 1 */
+
+  /* USER CODE END LPTIM2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

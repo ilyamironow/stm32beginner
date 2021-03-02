@@ -41,7 +41,7 @@ void MX_LPTIM2_Init(void);
 /* USER CODE BEGIN Prototypes */
 void Start_LPTIM2_Counter(void);
 
-void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr);
+void Set_values_REP_CMP_ARR(uint32_t cmp, uint32_t arr);
 
 void Stop_LPTIM2_Counter(void);
 /* USER CODE END Prototypes */

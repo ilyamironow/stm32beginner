@@ -82,6 +82,10 @@ void MX_LPTIM2_Init(void)
   GPIO_InitStruct.Alternate = LL_GPIO_AF_14;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /* LPTIM2 interrupt Init */
+  NVIC_SetPriority(LPTIM2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(LPTIM2_IRQn);
+
   /* USER CODE BEGIN LPTIM2_Init 1 */
 
   /* USER CODE END LPTIM2_Init 1 */
@@ -107,20 +111,15 @@ void Start_LPTIM2_Counter(void)
   LL_LPTIM_Enable(LPTIM2);
 }
 
-void Set_values_REP_CMP_ARR(uint8_t rep, uint32_t cmp, uint32_t arr)
+void Set_values_REP_CMP_ARR(uint32_t cmp, uint32_t arr)
 {
   cmp = cmp*LSE_VALUE/(64*1000);
   arr = arr*LSE_VALUE/(64*1000);
-  /* rep-1 are rep Autoreload matches */
-  LL_LPTIM_SetRepetition(LPTIM2, rep - 1);
   
   LL_LPTIM_SetCompare(LPTIM2, cmp);
   LL_LPTIM_SetAutoReload(LPTIM2, arr);
   
-  while (LL_LPTIM_IsActiveFlag_UE(LPTIM2) == 0) 
-  {
-    LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
-  }
+  LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
 }
 
 void Stop_LPTIM2_Counter(void)
