@@ -51,6 +51,9 @@
 void LED_mode_execution(enum mode selected_mode);
 
 enum mode cur_mode = THREE_SHORT;
+uint8_t cycles = 1;
+extern uint8_t repetition;
+extern _Bool flag, flag2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,7 +126,7 @@ int main(void)
   while (1)
   {  
     /* USER CODE END WHILE */
-    
+    LED_mode_execution(cur_mode);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -196,7 +199,21 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void LED_execution(void)
+{
+  if (cycles != repetition)
+  {
+    cycles = cycles + 1;
+    flag = 1;
+    LED_mode_execution(cur_mode);
+  }
+  else 
+  {
+    cycles = 1;
+    cur_mode = (enum mode) ((cur_mode + 1) % LED_MODES_NUMBER);  
+    flag2 = 1;
+  }
+}
 /* USER CODE END 4 */
 
 /**
