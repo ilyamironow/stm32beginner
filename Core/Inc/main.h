@@ -78,8 +78,6 @@ enum mode {
     TWO_LONG,
     LED_MODES_NUMBER
 };
-
-void LED_execution(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

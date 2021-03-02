@@ -2,11 +2,11 @@
 #include "lptim.h"
 /* USER CODE BEGIN 0 */
 uint8_t repetition = 1;
+uint8_t cycles = 1;
+_Bool flag = 1;
+extern enum mode curMode;
 
-extern uint8_t cycles;
-_Bool flag, flag2;
-
-void LED_mode_execution(enum mode selected_mode) 
+void LEDModeExecution(enum mode selected_mode) 
 {
   if (flag)
   {
@@ -23,7 +23,6 @@ void LED_mode_execution(enum mode selected_mode)
     case LONG_AND_TWO_SHORT:
       startTime = 300;
       endTime = 2000;
-      
       if (cycles > 1)
       {
         repetition = 3;
@@ -49,16 +48,27 @@ void LED_mode_execution(enum mode selected_mode)
       endTime = 2000;
     }
     Set_values_REP_CMP_ARR(startTime, endTime);
-  } else if (flag2)
+  }
+}
+
+void LEDModeContinuation(void)
+{
+  if (cycles != repetition)
   {
-    flag2 = 0;
+    cycles = cycles + 1;
+    flag = 1;
+    LEDModeExecution(curMode);
+  }
+  else 
+  {
+    cycles = 1;
+    flag = 1;
+    curMode = (enum mode) ((curMode + 1) % LED_MODES_NUMBER);
     LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
     /* Enter STOP 2 mode */
     LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
     /* Set SLEEPDEEP bit of Cortex System Control Register */
-    LL_LPM_EnableDeepSleep();  
-    /* Request Wait For Interrupt */
-    __WFI();
+    LL_LPM_EnableDeepSleep(); 
   }
 }
 /* USER CODE END 0 */

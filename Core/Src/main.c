@@ -48,12 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-void LED_mode_execution(enum mode selected_mode);
-
-enum mode cur_mode = THREE_SHORT;
-uint8_t cycles = 1;
-extern uint8_t repetition;
-extern _Bool flag, flag2;
+void LEDModeExecution(enum mode selected_mode);
+enum mode curMode = THREE_SHORT;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -105,28 +101,26 @@ int main(void)
   MX_USART2_UART_Init();
   MX_LPTIM1_Init();
   /* USER CODE BEGIN 2 */
-  
   LL_LPTIM_EnableIT_ARRM(LPTIM1);
   LL_LPTIM_Enable(LPTIM1);
-  
   LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/64); //ARR interrupt is each second
-  
   LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
   
   /* Enter STOP 2 mode */
   LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
   /* Set SLEEPDEEP bit of Cortex System Control Register */
   LL_LPM_EnableDeepSleep();  
-  /* Request Wait For Interrupt */
-  __WFI();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {  
+    /* Request Wait For Interrupt */
+    __WFI();
+    LEDModeExecution(curMode);
     /* USER CODE END WHILE */
-    LED_mode_execution(cur_mode);
+    
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -199,21 +193,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void LED_execution(void)
-{
-  if (cycles != repetition)
-  {
-    cycles = cycles + 1;
-    flag = 1;
-    LED_mode_execution(cur_mode);
-  }
-  else 
-  {
-    cycles = 1;
-    cur_mode = (enum mode) ((cur_mode + 1) % LED_MODES_NUMBER);  
-    flag2 = 1;
-  }
-}
+
 /* USER CODE END 4 */
 
 /**
