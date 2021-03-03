@@ -39,11 +39,9 @@ void MX_LPTIM1_Init(void);
 void MX_LPTIM2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void Start_LPTIM2_Counter(void);
+void startLPTIM2Counter(void);
 
-void Set_values_REP_CMP_ARR(uint32_t cmp, uint32_t arr);
-
-void Stop_LPTIM2_Counter(void);
+void setCompareAutoReload(uint32_t cmp, uint32_t arr);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "WVT_LED.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,8 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-void LEDModeExecution(enum mode selected_mode);
-enum mode curMode = THREE_SHORT;
+enum mode CurMode = THREE_SHORT;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,9 +100,16 @@ int main(void)
   MX_USART2_UART_Init();
   MX_LPTIM1_Init();
   /* USER CODE BEGIN 2 */
+  uint32_t prescalerBitsLPTIM1 = LL_LPTIM_GetPrescaler(LPTIM1) >> LPTIM_CFGR_PRESC_Pos;
+  uint32_t prescalerValueLPTIM1 = 1;
+  for (uint8_t i = 0; i < prescalerBitsLPTIM1; ++i) 
+  {
+    prescalerValueLPTIM1 = prescalerValueLPTIM1*2;
+  }
+  
   LL_LPTIM_EnableIT_ARRM(LPTIM1);
   LL_LPTIM_Enable(LPTIM1);
-  LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/64); //ARR interrupt is each second
+  LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/prescalerValueLPTIM1); //ARR interrupt is each second
   LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
   
   /* Enter STOP 2 mode */
@@ -118,7 +124,7 @@ int main(void)
   {  
     /* Request Wait For Interrupt */
     __WFI();
-    LEDModeExecution(curMode);
+    LEDModeExecution(CurMode);
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */

@@ -1,10 +1,12 @@
 /* Includes ------------------------------------------------------------------*/
 #include "lptim.h"
 /* USER CODE BEGIN 0 */
+#include "WVT_LED.h"
+
 uint8_t repetition = 1;
 uint8_t cycles = 1;
 uint8_t flag = 1;
-extern enum mode curMode;
+extern enum mode CurMode;
 
 void LEDModeExecution(enum mode selected_mode) 
 {
@@ -12,7 +14,7 @@ void LEDModeExecution(enum mode selected_mode)
   {
     flag = 0;
     uint32_t startTime = 0, endTime = 1000;
-    Start_LPTIM2_Counter();
+    startLPTIM2Counter();
     switch (selected_mode)
     {
     case THREE_SHORT:
@@ -47,7 +49,7 @@ void LEDModeExecution(enum mode selected_mode)
       startTime = 300;
       endTime = 2000;
     }
-    Set_values_REP_CMP_ARR(startTime, endTime);
+    setCompareAutoReload(startTime, endTime);
   }
   //so that __WFI() executes and not LEDModeExecution
   if (flag == 2)
@@ -60,13 +62,13 @@ void LEDModeContinuation(void)
   {
     cycles = cycles + 1;
     flag = 1;
-    LEDModeExecution(curMode);
+    LEDModeExecution(CurMode);
   }
   else 
   {
     cycles = 1;
     flag = 2;
-    curMode = (enum mode) ((curMode + 1) % LED_MODES_NUMBER);
+    CurMode = (enum mode) ((CurMode + 1) % LED_MODES_NUMBER);
     LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
     /* Enter STOP 2 mode */
     LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);

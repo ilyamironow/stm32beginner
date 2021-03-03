@@ -1215,6 +1215,9 @@
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\WVT_LED.c</name>
                 </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Inc\WVT_LED.h</name>
+                </file>
             </group>
         </group>
     </group>

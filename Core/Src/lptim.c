@@ -103,7 +103,7 @@ void MX_LPTIM2_Init(void)
 }
 
 /* USER CODE BEGIN 1 */
-void Start_LPTIM2_Counter(void)
+void startLPTIM2Counter(void)
 {
   LL_LPTIM_SetWaveform(LPTIM2, LL_LPTIM_OUTPUT_WAVEFORM_PWM);
   
@@ -111,20 +111,22 @@ void Start_LPTIM2_Counter(void)
   LL_LPTIM_Enable(LPTIM2);
 }
 
-void Set_values_REP_CMP_ARR(uint32_t cmp, uint32_t arr)
+void setCompareAutoReload(uint32_t cmp, uint32_t arr)
 {
-  cmp = cmp*LSE_VALUE/(64*1000);
-  arr = arr*LSE_VALUE/(64*1000);
+  uint32_t prescalerBitsLPTIM2 = LL_LPTIM_GetPrescaler(LPTIM2) >> LPTIM_CFGR_PRESC_Pos;
+  uint32_t prescalerValueLPTIM2 = 1;
+  for (uint8_t i = 0; i < prescalerBitsLPTIM2; ++i) 
+  {
+    prescalerValueLPTIM2 = prescalerValueLPTIM2*2;
+  }
+  
+  cmp = cmp*LSE_VALUE/(prescalerValueLPTIM2*1000);
+  arr = arr*LSE_VALUE/(prescalerValueLPTIM2*1000);
   
   LL_LPTIM_SetCompare(LPTIM2, cmp);
   LL_LPTIM_SetAutoReload(LPTIM2, arr);
   
   LL_LPTIM_StartCounter(LPTIM2, LL_LPTIM_OPERATING_MODE_ONESHOT);
-}
-
-void Stop_LPTIM2_Counter(void)
-{
-  LL_LPTIM_Disable(LPTIM2);
 }
 /* USER CODE END 1 */
 

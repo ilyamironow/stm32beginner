@@ -70,14 +70,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-enum mode {
-    THREE_SHORT,
-    LONG_AND_TWO_SHORT,
-    TWO_VERY_SHORT,
-    FIVE_SHORT,
-    TWO_LONG,
-    LED_MODES_NUMBER
-};
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
