@@ -23,11 +23,11 @@ void LEDModeExecution(enum mode selected_mode)
       break;
       
     case LONG_AND_TWO_SHORT:
+      repetition = 3;
       startTime = 300;
       endTime = 2000;
       if (cycles > 1)
       {
-        repetition = 3;
         startTime = 500;
         endTime = 1000;
       }
@@ -48,6 +48,56 @@ void LEDModeExecution(enum mode selected_mode)
       repetition = 2;
       startTime = 300;
       endTime = 2000;
+      break;
+      
+    case THREE_VERY_SHORT_AND_LONG:
+      repetition = 4;
+      startTime = 250;
+      endTime = 500;
+      if (cycles > 3)
+      {
+        startTime = 300;
+        endTime = 2000;
+      }
+      break;
+      
+    case SHORT_AND_VERY_SHORT_SHORT_AND_VERY_SHORT:
+      repetition = 4;
+      startTime = 500;
+      endTime = 1000;
+      if (cycles == 2 || cycles == 4)
+      {
+        startTime = 250;
+        endTime = 500;
+      }
+      break;
+      
+    case FOUR_VERY_SHORT:
+      repetition = 4;
+      startTime = 250;
+      endTime = 500;
+      break;
+      
+    case SHORT_AND_LONG:
+      repetition = 2;
+      startTime = 500;
+      if (cycles > 1)
+      {
+        startTime = 300;
+        endTime = 2000;
+      }
+      break;
+      
+    case LONG_AND_TWO_VERY_SHORT_AND_LONG:
+      repetition = 4;
+      startTime = 300;
+      endTime = 2000;
+      if (cycles > 1 && cycles < 4)
+      {
+        startTime = 250;
+        endTime = 500;
+      }
+      break;
     }
     setCompareAutoReload(startTime, endTime);
   }

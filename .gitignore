@@ -1,5 +1,5 @@
-EWARM/led_indicator/
-/EWARM/led_indicator/
+EWARM/led_indicator/*
+/EWARM/led_indicator/*
 *.o
 *.pbi
 *.xcl
