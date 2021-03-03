@@ -3,12 +3,12 @@
 /* USER CODE BEGIN 0 */
 uint8_t repetition = 1;
 uint8_t cycles = 1;
-_Bool flag = 1;
+uint8_t flag = 1;
 extern enum mode curMode;
 
 void LEDModeExecution(enum mode selected_mode) 
 {
-  if (flag)
+  if (flag == 1)
   {
     flag = 0;
     uint32_t startTime = 0, endTime = 1000;
@@ -49,6 +49,9 @@ void LEDModeExecution(enum mode selected_mode)
     }
     Set_values_REP_CMP_ARR(startTime, endTime);
   }
+  //so that __WFI() executes and not LEDModeExecution
+  if (flag == 2)
+    flag = 1;
 }
 
 void LEDModeContinuation(void)
@@ -62,7 +65,7 @@ void LEDModeContinuation(void)
   else 
   {
     cycles = 1;
-    flag = 1;
+    flag = 2;
     curMode = (enum mode) ((curMode + 1) % LED_MODES_NUMBER);
     LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
     /* Enter STOP 2 mode */
