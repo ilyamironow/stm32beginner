@@ -1,0 +1,12 @@
+<map id="C:/Users/dev/Documents/STM_projecti/firsttest/Core/Inc/main.h" name="C:/Users/dev/Documents/STM_projecti/firsttest/Core/Inc/main.h">
+<area shape="rect" id="node1" title=": Header for main.c file. This file contains the common defines of the application." alt="" coords="352,5,519,61"/>
+<area shape="rect" id="node2" href="$gpio_8h.html" title="This file contains all the function prototypes for the gpio.c file." alt="" coords="109,109,276,165"/>
+<area shape="rect" id="node4" href="$main_8c.html" title=": Main program body" alt="" coords="196,213,363,269"/>
+<area shape="rect" id="node5" href="$lptim_8h.html" title="This file contains all the function prototypes for the lptim.c file." alt="" coords="352,109,519,165"/>
+<area shape="rect" id="node8" href="$usart_8h.html" title="This file contains all the function prototypes for the usart.c file." alt="" coords="543,109,709,165"/>
+<area shape="rect" id="node10" href="$stm32l4xx__it_8c.html" title="Interrupt Service Routines." alt="" coords="733,109,900,165"/>
+<area shape="rect" id="node3" href="$gpio_8c.html" title="This file provides code for the configuration of all used GPIO pins." alt="" coords="5,213,172,269"/>
+<area shape="rect" id="node6" href="$lptim_8c.html" title="This file provides code for the configuration of the LPTIM instances." alt="" coords="577,213,744,269"/>
+<area shape="rect" id="node7" href="$_w_v_t___l_e_d_8c.html" title="LED mode functions." alt="" coords="387,213,553,269"/>
+<area shape="rect" id="node9" href="$usart_8c.html" title="This file provides code for the configuration of the USART instances." alt="" coords="768,213,935,269"/>
+</map>

@@ -103,6 +103,12 @@ void MX_LPTIM2_Init(void)
 }
 
 /* USER CODE BEGIN 1 */
+
+/*!
+* \brief Enables LPTIM2 in PWM mode
+*
+* \retval void
+*/
 void startLPTIM2Counter(void)
 {
   LL_LPTIM_SetWaveform(LPTIM2, LL_LPTIM_OUTPUT_WAVEFORM_PWM);
@@ -111,6 +117,13 @@ void startLPTIM2Counter(void)
   LL_LPTIM_Enable(LPTIM2);
 }
 
+/*!
+* \brief Lights LED for required time interval once
+* @note  Starts at cmp and ends at arr
+* \param uint32_t Compare value in milliseconds
+* \param uint32_t Auto reload value in milliseconds
+* \retval void
+*/
 void setCompareAutoReload(uint32_t cmp, uint32_t arr)
 {
   uint32_t prescalerBitsLPTIM2 = LL_LPTIM_GetPrescaler(LPTIM2) >> LPTIM_CFGR_PRESC_Pos;
@@ -120,6 +133,7 @@ void setCompareAutoReload(uint32_t cmp, uint32_t arr)
     prescalerValueLPTIM2 = prescalerValueLPTIM2*2;
   }
   
+  // Converts milliseconds to actual CMP and ARR values
   cmp = cmp*LSE_VALUE/(prescalerValueLPTIM2*1000);
   arr = arr*LSE_VALUE/(prescalerValueLPTIM2*1000);
   

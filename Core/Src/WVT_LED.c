@@ -1,13 +1,27 @@
+/*!
+ * \file WVT_LED.c
+ * \brief LED mode functions
+ * \version 0.1
+ * \date 03-03-2021
+ * \copyright WAVIoT 2021
+ */
+
 /* Includes ------------------------------------------------------------------*/
 #include "lptim.h"
 /* USER CODE BEGIN 0 */
 #include "WVT_LED.h"
 
-uint8_t repetition = 1;
+uint8_t repetition = 1; // Number of LED glows required in the current LED mode
 uint8_t cycles = 1;
 uint8_t flag = 1;
 extern enum mode CurMode;
 
+/*!
+* \brief Lights LED one time according to current LED mode
+*
+* \param [IN] enum mode value
+* \retval void
+*/
 void LEDModeExecution(enum mode selected_mode) 
 {
   if (flag == 1)
@@ -15,6 +29,8 @@ void LEDModeExecution(enum mode selected_mode)
     flag = 0;
     uint32_t startTime = 0, endTime = 1000;
     startLPTIM2Counter();
+    
+    /*  set variables for current LED mode  */
     switch (selected_mode)
     {
     case THREE_SHORT:
@@ -99,13 +115,22 @@ void LEDModeExecution(enum mode selected_mode)
       }
       break;
     }
+    
+    /*  Lights LED for required time interval  */
     setCompareAutoReload(startTime, endTime);
   }
-  //so that __WFI() executes and not LEDModeExecution
+  /* To make sure that __WFI() executes and not LEDModeExecution again */
   if (flag == 2)
     flag = 1;
 }
 
+/*!
+* \brief Continues the animation or chooses the next LED mode
+* @note  Continues the animation when LED was not lighted required number of cycles
+* @note  or the animation has ended and next mode should be chosen. In the last
+* @note  case LPTIM1 starts. 
+* \retval void
+*/
 void LEDModeContinuation(void)
 {
   if (cycles != repetition)
@@ -118,7 +143,7 @@ void LEDModeContinuation(void)
   {
     cycles = 1;
     flag = 2;
-    CurMode = (enum mode) ((CurMode + 1) % LED_MODES_NUMBER);
+    CurMode = (enum mode) ((CurMode + 1) % LED_MODES_NUMBER); // next mode
     LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
     /* Enter STOP 2 mode */
     LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);

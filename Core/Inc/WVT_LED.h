@@ -3,9 +3,7 @@
  * \brief LED mode functions
  * \version 0.1
  * \date 03-03-2021
- *
  * \copyright WAVIoT 2021
- *
  */
 
 enum mode {

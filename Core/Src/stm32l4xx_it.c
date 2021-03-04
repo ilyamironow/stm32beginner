@@ -204,6 +204,8 @@ void SysTick_Handler(void)
 void LPTIM1_IRQHandler(void)
 {
   /* USER CODE BEGIN LPTIM1_IRQn 0 */
+  
+  /*  LPTIM1 interrupt wakes up the controller from the STOP 2 mode  */
   if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM1) == 1) 
   {
     LL_LPTIM_ClearFLAG_ARRM(LPTIM1);
@@ -223,6 +225,8 @@ void LPTIM2_IRQHandler(void)
   if (LL_LPTIM_IsActiveFlag_ARRM(LPTIM2) == 1) 
   {
     LL_LPTIM_ClearFLAG_ARRM(LPTIM2);
+    
+    /*  Decides whether the animation should be stopped or continued */
     LEDModeContinuation();
   }
   /* USER CODE END LPTIM2_IRQn 0 */
