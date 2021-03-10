@@ -12,7 +12,7 @@
 #include "WVT_LED.h"
 
 /*!
- * \brief time intervals for VERY_SHORT|SHORT|LONG in milliseconds
+ * \brief time intervals(from start to end) for VERY_SHORT|SHORT|LONG in milliseconds
  *
  */
 #define START_VERY_SHORT 250
@@ -23,8 +23,8 @@
 #define END_LONG 2000
 
 uint8_t Repetition = 1; // Number of LED glows required in the current LED mode
-uint8_t Cycles = 1;
-uint8_t CanExecute = 1; // 0 - not ready; 1 - ready; 2 -  pre-ready
+uint8_t CurrentCycle = 1; // Current amount of LED glows
+uint8_t CanExecute = 1; // 0 - not ready; 1 - ready; 2 - pre-ready
 enum mode SelectedMode = THREE_SHORT; // first LED mode that will be executed
 
 /*!
@@ -53,7 +53,7 @@ void LEDModeExecution()
       Repetition = 3;
       startTime = START_LONG;
       endTime = END_LONG;
-      if (Cycles > 1)
+      if (CurrentCycle > 1)
       {
         startTime = START_SHORT;
         endTime = END_SHORT;
@@ -81,18 +81,18 @@ void LEDModeExecution()
       Repetition = 4;
       startTime = START_VERY_SHORT;
       endTime = END_VERY_SHORT;
-      if (Cycles > 3)
+      if (CurrentCycle > 3)
       {
         startTime = START_LONG;
         endTime = END_LONG;
       }
       break;
       
-    case SHORT_AND_VERY_SHORT_SHORT_AND_VERY_SHORT:
+    case SHORT_AND_VERY_SHORT_TWICE:
       Repetition = 4;
       startTime = END_VERY_SHORT;
       endTime = END_SHORT;
-      if (Cycles == 2 || Cycles == 4)
+      if (CurrentCycle == 2 || CurrentCycle == 4)
       {
         startTime = START_VERY_SHORT;
         endTime = END_VERY_SHORT;
@@ -108,7 +108,7 @@ void LEDModeExecution()
     case SHORT_AND_LONG:
       Repetition = 2;
       startTime = START_SHORT;
-      if (Cycles > 1)
+      if (CurrentCycle > 1)
       {
         startTime = START_LONG;
         endTime = END_LONG;
@@ -119,7 +119,7 @@ void LEDModeExecution()
       Repetition = 4;
       startTime = START_LONG;
       endTime = END_LONG;
-      if (Cycles > 1 && Cycles < 4)
+      if (CurrentCycle > 1 && CurrentCycle < 4)
       {
         startTime = START_VERY_SHORT;
         endTime = END_VERY_SHORT;
@@ -137,22 +137,22 @@ void LEDModeExecution()
 
 /*!
 * \brief Continues the animation or chooses the next LED mode
-* \note  Continues the animation when LED was not lighted required number of Cycles
+* \note  Continues the animation when LED was not lighted required number of cycles
 * \note  or the animation has ended and next mode should be chosen. In the last
 * \note  case LPTIM1 starts. 
 * \retval void
 */
 void LEDModeContinuation(void)
 {
-  if (Cycles != Repetition)
+  if (CurrentCycle != Repetition)
   {
-    Cycles = Cycles + 1;
+    CurrentCycle = CurrentCycle + 1;
     CanExecute = 1;
     LEDModeExecution();
   }
   else 
   {
-    Cycles = 1;
+    CurrentCycle = 1;
     CanExecute = 2;
     SelectedMode = (enum mode) ((SelectedMode + 1) % LED_MODES_NUMBER); // next mode
     startLPTIM1Counter();

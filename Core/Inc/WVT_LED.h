@@ -6,6 +6,7 @@
  * \copyright WAVIoT 2021
  */
 
+/* glow modes of LED */
 enum mode {
     THREE_SHORT,
     LONG_AND_TWO_SHORT,
@@ -13,7 +14,7 @@ enum mode {
     FIVE_SHORT,
     TWO_LONG,
     THREE_VERY_SHORT_AND_LONG,
-    SHORT_AND_VERY_SHORT_SHORT_AND_VERY_SHORT,
+    SHORT_AND_VERY_SHORT_TWICE,
     FOUR_VERY_SHORT,
     SHORT_AND_LONG,
     LONG_AND_TWO_VERY_SHORT_AND_LONG,
