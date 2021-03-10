@@ -24,6 +24,12 @@
 #if !defined  (LSE_VALUE)
 #define LSE_VALUE    32768U     /*!< Value of the LSE oscillator in Hz */
 #endif /* LSE_VALUE */
+
+/*!
+ * \brief milliseconds in seconds
+ *
+ */
+#define MS_IN_SECOND 1000
 /* USER CODE END 0 */
 
 /* LPTIM1 init function */
@@ -105,11 +111,21 @@ void MX_LPTIM2_Init(void)
 /* USER CODE BEGIN 1 */
 
 /*!
+* \brief Starts LPTIM1 timer in single mode
+*
+* \retval void
+*/
+void startLPTIM1Counter(void)
+{
+  LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
+}
+
+/*!
 * \brief Enables LPTIM2 in PWM mode
 *
 * \retval void
 */
-void startLPTIM2Counter(void)
+void startPWMLPTIM2Counter(void)
 {
   LL_LPTIM_SetWaveform(LPTIM2, LL_LPTIM_OUTPUT_WAVEFORM_PWM);
   
@@ -119,23 +135,18 @@ void startLPTIM2Counter(void)
 
 /*!
 * \brief Lights LED for required time interval once
-* @note  Starts at cmp and ends at arr
+* \note  Starts at cmp and ends at arr
 * \param uint32_t Compare value in milliseconds
 * \param uint32_t Auto reload value in milliseconds
 * \retval void
 */
 void setCompareAutoReload(uint32_t cmp, uint32_t arr)
 {
-  uint32_t prescalerBitsLPTIM2 = LL_LPTIM_GetPrescaler(LPTIM2) >> LPTIM_CFGR_PRESC_Pos;
-  uint32_t prescalerValueLPTIM2 = 1;
-  for (uint8_t i = 0; i < prescalerBitsLPTIM2; ++i) 
-  {
-    prescalerValueLPTIM2 = prescalerValueLPTIM2*2;
-  }
+  uint32_t prescalerValueLPTIM2 = 1 << (LL_LPTIM_GetPrescaler(LPTIM2) >> LPTIM_CFGR_PRESC_Pos);
   
   // Converts milliseconds to actual CMP and ARR values
-  cmp = cmp*LSE_VALUE/(prescalerValueLPTIM2*1000);
-  arr = arr*LSE_VALUE/(prescalerValueLPTIM2*1000);
+  cmp = cmp*LSE_VALUE/(prescalerValueLPTIM2*MS_IN_SECOND);
+  arr = arr*LSE_VALUE/(prescalerValueLPTIM2*MS_IN_SECOND);
   
   LL_LPTIM_SetCompare(LPTIM2, cmp);
   LL_LPTIM_SetAutoReload(LPTIM2, arr);

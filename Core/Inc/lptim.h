@@ -39,7 +39,9 @@ void MX_LPTIM1_Init(void);
 void MX_LPTIM2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-void startLPTIM2Counter(void);
+void startLPTIM1Counter(void);
+
+void startPWMLPTIM2Counter(void);
 
 void setCompareAutoReload(uint32_t cmp, uint32_t arr);
 /* USER CODE END Prototypes */

@@ -3,6 +3,8 @@ EWARM/led_indicator/*
 *.o
 *.pbi
 *.xcl
+Doxygen
+/Doxygen
 
 EWARM/settings/Project.wsdt
 EWARM/settings/led_indicator.dnx

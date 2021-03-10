@@ -48,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-enum mode CurMode = THREE_SHORT; // first LED mode that will be executed
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -102,34 +102,28 @@ int main(void)
   /* USER CODE BEGIN 2 */
   
   // Getting actual prescaler number
-  uint32_t prescalerBitsLPTIM1 = LL_LPTIM_GetPrescaler(LPTIM1) >> LPTIM_CFGR_PRESC_Pos;
-  uint32_t prescalerValueLPTIM1 = 1;
-  for (uint8_t i = 0; i < prescalerBitsLPTIM1; ++i) 
-  {
-    prescalerValueLPTIM1 = prescalerValueLPTIM1*2;
-  }
+  uint32_t prescalerValueLPTIM1 = 1 << (LL_LPTIM_GetPrescaler(LPTIM1) >> LPTIM_CFGR_PRESC_Pos);
   
   // Starting LPTIM1
   LL_LPTIM_EnableIT_ARRM(LPTIM1);
   LL_LPTIM_Enable(LPTIM1);
   LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/prescalerValueLPTIM1); //ARR interrupt is each second
   LL_LPTIM_StartCounter(LPTIM1, LL_LPTIM_OPERATING_MODE_ONESHOT);
-  
-  /* Enter STOP 2 mode */
-  LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
-  /* Set SLEEPDEEP bit of Cortex System Control Register */
-  LL_LPM_EnableDeepSleep();  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {  
+    /* Enter STOP 2 mode */
+    LL_PWR_SetPowerMode(LL_PWR_MODE_STOP2);
+    /* Set SLEEPDEEP bit of Cortex System Control Register */
+    LL_LPM_EnableDeepSleep();  
     /* Request Wait For Interrupt */
     __WFI();
     
-    // Start LED animation
-    LEDModeExecution(CurMode);
+    /* Start LED animation */
+    LEDModeExecution();
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */
