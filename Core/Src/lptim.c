@@ -144,7 +144,7 @@ void setCompareAutoReload(uint32_t cmp, uint32_t arr)
 {
   uint32_t prescalerValueLPTIM2 = 1 << (LL_LPTIM_GetPrescaler(LPTIM2) >> LPTIM_CFGR_PRESC_Pos);
   
-  // Converts milliseconds to actual CMP and ARR values
+  /* Converts milliseconds to actual CMP and ARR values */
   cmp = cmp*LSE_VALUE/(prescalerValueLPTIM2*MS_IN_SECOND);
   arr = arr*LSE_VALUE/(prescalerValueLPTIM2*MS_IN_SECOND);
   

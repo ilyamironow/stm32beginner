@@ -104,7 +104,7 @@ int main(void)
   // Getting actual prescaler number
   uint32_t prescalerValueLPTIM1 = 1 << (LL_LPTIM_GetPrescaler(LPTIM1) >> LPTIM_CFGR_PRESC_Pos);
   
-  // Starting LPTIM1
+  /* Starting LPTIM1 */
   LL_LPTIM_EnableIT_ARRM(LPTIM1);
   LL_LPTIM_Enable(LPTIM1);
   LL_LPTIM_SetAutoReload(LPTIM1, LSE_VALUE/prescalerValueLPTIM1); //ARR interrupt is each second

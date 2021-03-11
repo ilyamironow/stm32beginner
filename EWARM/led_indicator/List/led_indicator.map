@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ELF Linker V8.40.1.212/W32 for ARM                  10/Mar/2021  15:59:31
+# IAR ELF Linker V8.40.1.212/W32 for ARM                  10/Mar/2021  20:35:25
 # Copyright 2007-2019 IAR Systems AB.
 #
 #    Output file  =
@@ -8,7 +8,7 @@
 #    Map file     =
 #        C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\led_indicator\List\led_indicator.map
 #    Command line =
-#        -f C:\Users\75BD~1\AppData\Local\Temp\EW2D27.tmp
+#        -f C:\Users\75BD~1\AppData\Local\Temp\EWC50A.tmp
 #        (C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\led_indicator\Obj\gpio.o
 #        C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\led_indicator\Obj\lptim.o
 #        C:\Users\dev\Documents\STM_projecti\firsttest\EWARM\led_indicator\Obj\main.o
@@ -267,7 +267,7 @@ BusFault_Handler         0x800'0e8b    0x2  Code  Gb  stm32l4xx_it.o [1]
 CSTACK$$Base            0x2000'0008          --   Gb  - Linker created -
 CSTACK$$Limit           0x2000'0408          --   Gb  - Linker created -
 CanExecute              0x2000'0006    0x1  Data  Gb  WVT_LED.o [1]
-Cycles                  0x2000'0005    0x1  Data  Gb  WVT_LED.o [1]
+CurrentCycle            0x2000'0005    0x1  Data  Gb  WVT_LED.o [1]
 DebugMon_Handler         0x800'0e91    0x2  Code  Gb  stm32l4xx_it.o [1]
 HardFault_Handler        0x800'0e87    0x2  Code  Gb  stm32l4xx_it.o [1]
 LEDModeContinuation      0x800'0bdd   0x32  Code  Gb  WVT_LED.o [1]

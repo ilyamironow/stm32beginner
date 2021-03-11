@@ -22,10 +22,14 @@
 #define START_LONG 300
 #define END_LONG 2000
 
-uint8_t Repetition = 1; // Number of LED glows required in the current LED mode
-uint8_t CurrentCycle = 1; // Current amount of LED glows
-uint8_t CanExecute = 1; // 0 - not ready; 1 - ready; 2 - pre-ready
-enum mode SelectedMode = THREE_SHORT; // first LED mode that will be executed
+/* Number of LED glows required in the current LED mode */
+uint8_t Repetition = 1; 
+/* Current amount of LED glows */
+uint8_t CurrentCycle = 1;
+/* 0 - not ready; 1 - ready; 2 - pre-ready */
+uint8_t CanExecute = 1; 
+/* First LED mode that will be executed */
+enum mode SelectedMode = THREE_SHORT; 
 
 /*!
 * \brief Lights LED one time according to current LED mode
@@ -124,6 +128,10 @@ void LEDModeExecution()
         startTime = START_VERY_SHORT;
         endTime = END_VERY_SHORT;
       }
+      break;
+      
+    default:
+      /* possible action */
       break;
     }
     
