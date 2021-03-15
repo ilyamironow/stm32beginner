@@ -69,7 +69,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+ 
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -124,6 +124,8 @@ int main(void)
     
     /* Start LED animation */
     LEDModeExecution();
+    
+    startLPTIM1Counter();
     /* USER CODE END WHILE */
     
     /* USER CODE BEGIN 3 */

@@ -26,9 +26,9 @@
 uint8_t Repetition = 1; 
 /* Current amount of LED glows */
 uint8_t CurrentCycle = 1;
-/* 0 - not ready; 1 - ready; 2 - pre-ready */
+/* 0 - not ready; 1 - ready; 2 - stopped */
 uint8_t CanExecute = 1; 
-/* First LED mode that will be executed */
+/* LED mode that will be executed */
 enum mode SelectedMode = THREE_SHORT; 
 
 /*!
@@ -138,9 +138,6 @@ void LEDModeExecution()
     /*  Lights LED for required time interval  */
     setCompareAutoReload(startTime, endTime);
   }
-  /* To make sure that __WFI() executes and not LEDModeExecution again */
-  if (CanExecute == 2)
-    CanExecute = 1;
 }
 
 /*!
@@ -162,8 +159,7 @@ void LEDModeContinuation(void)
   {
     CurrentCycle = 1;
     CanExecute = 2;
-    SelectedMode = (enum mode) ((SelectedMode + 1) % LED_MODES_NUMBER); // next mode
-    startLPTIM1Counter();
+    /* to execute LED animation again : CanExecute = 1 */
   }
 }
 /* USER CODE END 0 */
