@@ -1,6 +1,0 @@
-<map id="C:/Users/dev/Documents/STM_projecti/firsttest/Core/Inc/lptim.h" name="C:/Users/dev/Documents/STM_projecti/firsttest/Core/Inc/lptim.h">
-<area shape="rect" id="node1" title="This file contains all the function prototypes for the lptim.c file." alt="" coords="196,5,363,61"/>
-<area shape="rect" id="node2" href="$lptim_8c.html" title="This file provides code for the configuration of the LPTIM instances." alt="" coords="5,109,172,165"/>
-<area shape="rect" id="node3" href="$main_8c.html" title=": Main program body" alt="" coords="196,109,363,165"/>
-<area shape="rect" id="node4" href="$_w_v_t___l_e_d_8c.html" title="LED mode functions." alt="" coords="387,109,553,165"/>
-</map>
