@@ -69,7 +69,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
- 
+  _Bool eventOccured = 1;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -123,7 +123,11 @@ int main(void)
     __WFI();
     
     /* Start LED animation */
-    LEDModeExecution();
+    if (eventOccured)
+    {
+      LEDModeExecution(THREE_SHORT);
+      eventOccured = 0;
+    }
     
     startLPTIM1Counter();
     /* USER CODE END WHILE */

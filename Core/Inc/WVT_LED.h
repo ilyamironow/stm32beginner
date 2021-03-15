@@ -21,6 +21,6 @@ enum mode {
     LED_MODES_NUMBER
 };
 
-void LEDModeExecution();
+void LEDModeExecution(enum mode SelectedMode);
 
 void LEDModeContinuation(void);

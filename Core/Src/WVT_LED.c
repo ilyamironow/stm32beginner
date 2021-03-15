@@ -25,11 +25,9 @@
 /* Number of LED glows required in the current LED mode */
 uint8_t Repetition = 1; 
 /* Current amount of LED glows */
-uint8_t CurrentCycle = 1;
-/* 0 - not ready; 1 - ready; 2 - stopped */
-uint8_t CanExecute = 1; 
+uint8_t CurrentCycle = 1; 
 /* LED mode that will be executed */
-enum mode SelectedMode = THREE_SHORT; 
+enum mode SelectedMode;
 
 /*!
 * \brief Lights LED one time according to current LED mode
@@ -37,107 +35,102 @@ enum mode SelectedMode = THREE_SHORT;
 * \param [IN] enum mode value
 * \retval void
 */
-void LEDModeExecution() 
+void LEDModeExecution(enum mode SelectedMode)  
 {
-  if (CanExecute == 1)
+  uint32_t startTime = 0, endTime = END_SHORT;
+  startPWMLPTIM2Counter();
+  
+  /*  set variables for current LED mode  */
+  switch (SelectedMode)
   {
-    CanExecute = 0;
-    uint32_t startTime = 0, endTime = END_SHORT;
-    startPWMLPTIM2Counter();
+  case THREE_SHORT:
+    Repetition = 3;
+    startTime = START_SHORT;
+    break;
     
-    /*  set variables for current LED mode  */
-    switch (SelectedMode)
+  case LONG_AND_TWO_SHORT:
+    Repetition = 3;
+    startTime = START_LONG;
+    endTime = END_LONG;
+    if (CurrentCycle > 1)
     {
-    case THREE_SHORT:
-      Repetition = 3;
       startTime = START_SHORT;
-      break;
-      
-    case LONG_AND_TWO_SHORT:
-      Repetition = 3;
-      startTime = START_LONG;
-      endTime = END_LONG;
-      if (CurrentCycle > 1)
-      {
-        startTime = START_SHORT;
-        endTime = END_SHORT;
-      }
-      break;
-      
-    case TWO_VERY_SHORT:
-      Repetition = 2;
-      startTime = START_VERY_SHORT;
-      endTime = END_VERY_SHORT;
-      break;
-      
-    case FIVE_SHORT:
-      Repetition = 5;
-      startTime = START_SHORT;
-      break;  
-      
-    case TWO_LONG:
-      Repetition = 2;
-      startTime = START_LONG;
-      endTime = END_LONG;
-      break;
-      
-    case THREE_VERY_SHORT_AND_LONG:
-      Repetition = 4;
-      startTime = START_VERY_SHORT;
-      endTime = END_VERY_SHORT;
-      if (CurrentCycle > 3)
-      {
-        startTime = START_LONG;
-        endTime = END_LONG;
-      }
-      break;
-      
-    case SHORT_AND_VERY_SHORT_TWICE:
-      Repetition = 4;
-      startTime = END_VERY_SHORT;
       endTime = END_SHORT;
-      if (CurrentCycle == 2 || CurrentCycle == 4)
-      {
-        startTime = START_VERY_SHORT;
-        endTime = END_VERY_SHORT;
-      }
-      break;
-      
-    case FOUR_VERY_SHORT:
-      Repetition = 4;
-      startTime = START_VERY_SHORT;
-      endTime = END_VERY_SHORT;
-      break;
-      
-    case SHORT_AND_LONG:
-      Repetition = 2;
-      startTime = START_SHORT;
-      if (CurrentCycle > 1)
-      {
-        startTime = START_LONG;
-        endTime = END_LONG;
-      }
-      break;
-      
-    case LONG_AND_TWO_VERY_SHORT_AND_LONG:
-      Repetition = 4;
+    }
+    break;
+    
+  case TWO_VERY_SHORT:
+    Repetition = 2;
+    startTime = START_VERY_SHORT;
+    endTime = END_VERY_SHORT;
+    break;
+    
+  case FIVE_SHORT:
+    Repetition = 5;
+    startTime = START_SHORT;
+    break;  
+    
+  case TWO_LONG:
+    Repetition = 2;
+    startTime = START_LONG;
+    endTime = END_LONG;
+    break;
+    
+  case THREE_VERY_SHORT_AND_LONG:
+    Repetition = 4;
+    startTime = START_VERY_SHORT;
+    endTime = END_VERY_SHORT;
+    if (CurrentCycle > 3)
+    {
       startTime = START_LONG;
       endTime = END_LONG;
-      if (CurrentCycle > 1 && CurrentCycle < 4)
-      {
-        startTime = START_VERY_SHORT;
-        endTime = END_VERY_SHORT;
-      }
-      break;
-      
-    default:
-      /* possible action */
-      break;
     }
+    break;
     
-    /*  Lights LED for required time interval  */
-    setCompareAutoReload(startTime, endTime);
+  case SHORT_AND_VERY_SHORT_TWICE:
+    Repetition = 4;
+    startTime = END_VERY_SHORT;
+    endTime = END_SHORT;
+    if (CurrentCycle == 2 || CurrentCycle == 4)
+    {
+      startTime = START_VERY_SHORT;
+      endTime = END_VERY_SHORT;
+    }
+    break;
+    
+  case FOUR_VERY_SHORT:
+    Repetition = 4;
+    startTime = START_VERY_SHORT;
+    endTime = END_VERY_SHORT;
+    break;
+    
+  case SHORT_AND_LONG:
+    Repetition = 2;
+    startTime = START_SHORT;
+    if (CurrentCycle > 1)
+    {
+      startTime = START_LONG;
+      endTime = END_LONG;
+    }
+    break;
+    
+  case LONG_AND_TWO_VERY_SHORT_AND_LONG:
+    Repetition = 4;
+    startTime = START_LONG;
+    endTime = END_LONG;
+    if (CurrentCycle > 1 && CurrentCycle < 4)
+    {
+      startTime = START_VERY_SHORT;
+      endTime = END_VERY_SHORT;
+    }
+    break;
+    
+  default:
+    /* possible action */
+    break;
   }
+  /*  Lights LED for required time interval  */
+  setCompareAutoReload(startTime, endTime);
 }
 
 /*!
@@ -152,14 +145,9 @@ void LEDModeContinuation(void)
   if (CurrentCycle != Repetition)
   {
     CurrentCycle = CurrentCycle + 1;
-    CanExecute = 1;
-    LEDModeExecution();
+    LEDModeExecution(SelectedMode);
   }
   else 
-  {
     CurrentCycle = 1;
-    CanExecute = 2;
-    /* to execute LED animation again : CanExecute = 1 */
-  }
 }
 /* USER CODE END 0 */
